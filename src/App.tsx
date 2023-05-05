@@ -1,7 +1,5 @@
 function App() {
-  return (
-    <p>Workout calendar app</p>
-  );
+  return <p>Workout calendar app</p>;
 }
 
 export default App;
