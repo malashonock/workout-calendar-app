@@ -23,13 +23,13 @@ export const CalendarDay: FunctionComponent<CalendarDayProps> = ({
 
   const isToDo = dayResult?.status === DayStatus.ToDo;
   const isDone = dayResult?.status === DayStatus.Done;
-  const isFailed = dayResult?.status === DayStatus.Failed;
+  const isMissed = dayResult?.status === DayStatus.Missed;
 
   const tooltipTitle = ((): string | undefined => {
     if (isToDo) return 'You have a workout scheduled on this day';
     if (isDone)
       return 'Well done! You did all scheduled excercises for this day';
-    if (isFailed) return "You missed your workout, don't give up!";
+    if (isMissed) return "You missed your workout, don't give up!";
   })();
 
   return (
@@ -41,7 +41,7 @@ export const CalendarDay: FunctionComponent<CalendarDayProps> = ({
         className={cn(
           styles.day,
           { [styles.done]: isDone },
-          { [styles.failed]: isFailed },
+          { [styles.missed]: isMissed },
           { [styles.todo]: isToDo },
         )}
       />

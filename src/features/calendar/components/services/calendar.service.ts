@@ -16,7 +16,7 @@ const getMonthResults = async (
     },
     {
       date: '2023-05-05',
-      status: DayStatus.Failed,
+      status: DayStatus.Missed,
     },
     {
       date: '2023-05-09',

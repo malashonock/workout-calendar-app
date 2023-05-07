@@ -1,9 +1,9 @@
 @import 'styles/_colors.scss';
 
 .day {
+  &.todo,
   &.done,
-  &.failed,
-  &.todo {
+  &.missed {
     font-weight: bolder;
   }
 
@@ -31,7 +31,7 @@
     }
   }
 
-  &.failed {
+  &.missed {
     &:not(:global(.MuiPickersDay-dayOutsideMonth)) {
       background-color: $red-background;
       color: $red-font;
