@@ -1,0 +1,45 @@
+@import 'styles/_colors.scss';
+
+.day {
+  &.done,
+  &.failed,
+  &.todo {
+    font-weight: bolder;
+  }
+
+  &.todo {
+    &:not(:global(.MuiPickersDay-dayOutsideMonth)) {
+      background-color: $yellow-background;
+      color: $yellow-font;
+    }
+
+    &:global(.MuiPickersDay-dayOutsideMonth) {
+      background-color: rgba($yellow-background, $alpha: 0.6);
+      color: rgba($yellow-font, 0.6);
+    }
+  }
+
+  &.done {
+    &:not(:global(.MuiPickersDay-dayOutsideMonth)) {
+      background-color: $green-background;
+      color: $green-font;
+    }
+
+    &:global(.MuiPickersDay-dayOutsideMonth) {
+      background-color: rgba($green-background, $alpha: 0.6);
+      color: rgba($green-font, 0.6);
+    }
+  }
+
+  &.failed {
+    &:not(:global(.MuiPickersDay-dayOutsideMonth)) {
+      background-color: $red-background;
+      color: $red-font;
+    }
+
+    &:global(.MuiPickersDay-dayOutsideMonth) {
+      background-color: rgba($red-background, $alpha: 0.6);
+      color: rgba($red-font, 0.6);
+    }
+  }
+}
