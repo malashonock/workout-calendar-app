@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import { App, StyleProvider } from 'features/layout/components';
+import { App } from 'features/layout/components';
 import reportWebVitals from './reportWebVitals';
 
 import 'styles/index.scss';

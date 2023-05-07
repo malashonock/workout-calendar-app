@@ -76,6 +76,7 @@ export const NavTabs: FunctionComponent<NavTabsProps> = ({
       {tabs.map(
         ({ to, label, icon }: TabConfig): JSX.Element => (
           <Tab
+            key={to}
             icon={icon}
             iconPosition={isWideScreen ? 'start' : 'top'}
             label={label}

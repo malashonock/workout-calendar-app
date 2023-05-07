@@ -7,7 +7,7 @@ import logoImagePath from 'assets/images/logo.png';
 export const Logo: FunctionComponent = () => {
   return (
     <Stack direction="row" gap={1}>
-      <img src={logoImagePath} alt="logo image" height="40" width="40" />
+      <img src={logoImagePath} alt="logo" height="40" width="40" />
       <Typography className={styles.text}>
         Workout
         <br />
