@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent, memo, useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Tabs, Tab } from '@mui/material';
 import cn from 'classnames';
@@ -41,51 +41,59 @@ export enum NavTabsVariant {
 
 interface NavTabsProps {
   variant: NavTabsVariant;
+  onSelectionLost?: (selectionLost: boolean) => void;
 }
 
-export const NavTabs: FunctionComponent<NavTabsProps> = ({
-  variant,
-}: NavTabsProps) => {
-  const { pathname } = useLocation();
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
+export const NavTabs: FunctionComponent<NavTabsProps> = memo(
+  ({ variant, onSelectionLost }: NavTabsProps) => {
+    const { pathname } = useLocation();
+    const [activeTabIndex, setActiveTabIndex] = useState(0);
 
-  useEffect(() => {
-    setActiveTabIndex(
-      tabs.findIndex(({ to }: TabConfig): boolean => pathname.startsWith(to)),
+    useEffect(() => {
+      const newTabIndex = tabs.findIndex(({ to }: TabConfig): boolean =>
+        pathname.startsWith(to),
+      );
+
+      if (newTabIndex > -1) {
+        setActiveTabIndex(newTabIndex);
+        onSelectionLost?.call(null, false);
+      } else {
+        onSelectionLost?.call(null, true);
+      }
+    }, [pathname]);
+
+    const { isWideScreen } = useScreenWidth();
+
+    const handleTabIndexChange = (
+      event: React.SyntheticEvent,
+      newTabIndex: number,
+    ) => {
+      setActiveTabIndex(newTabIndex);
+    };
+
+    return (
+      <Tabs
+        component="nav"
+        className={cn(styles.wrapper, styles[variant])}
+        value={activeTabIndex}
+        onChange={handleTabIndexChange}
+        variant={variant === NavTabsVariant.Bottom ? 'fullWidth' : 'standard'}
+        centered
+      >
+        {tabs.map(
+          ({ to, label, icon }: TabConfig): JSX.Element => (
+            <Tab
+              key={to}
+              icon={icon}
+              iconPosition={isWideScreen ? 'start' : 'top'}
+              label={label}
+              to={to}
+              component={NavLink}
+              className={styles.tab}
+            />
+          ),
+        )}
+      </Tabs>
     );
-  }, [pathname]);
-
-  const { isWideScreen } = useScreenWidth();
-
-  const handleTabIndexChange = (
-    event: React.SyntheticEvent,
-    newTabIndex: number,
-  ) => {
-    setActiveTabIndex(newTabIndex);
-  };
-
-  return (
-    <Tabs
-      component="nav"
-      className={cn(styles.wrapper, styles[variant])}
-      value={activeTabIndex}
-      onChange={handleTabIndexChange}
-      variant={variant === NavTabsVariant.Bottom ? 'fullWidth' : 'standard'}
-      centered
-    >
-      {tabs.map(
-        ({ to, label, icon }: TabConfig): JSX.Element => (
-          <Tab
-            key={to}
-            icon={icon}
-            iconPosition={isWideScreen ? 'start' : 'top'}
-            label={label}
-            to={to}
-            component={NavLink}
-            className={styles.tab}
-          />
-        ),
-      )}
-    </Tabs>
-  );
-};
+  },
+);
