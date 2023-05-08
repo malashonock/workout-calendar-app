@@ -1,6 +1,5 @@
 export * from './StyleProvider';
 export * from './Logo';
-export * from './UserAccountButton';
 export * from './NavTabs';
 export * from './NavbarTop';
 export * from './NavbarBottom';
