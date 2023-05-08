@@ -39,9 +39,16 @@ const getUserByCredentials = async (
   return user || null;
 };
 
+const getUserByToken = async (token: string): Promise<UserEntity | null> => {
+  const users = await UserRepository.getAllUsers();
+  const user = users.find((user: UserEntity) => user.token === token);
+  return user || null;
+};
+
 export const UserRepository = {
   addUser,
   getAllUsers,
   getUserById,
   getUserByCredentials,
+  getUserByToken,
 };

@@ -9,6 +9,7 @@ import {
 import dayjs from 'dayjs';
 
 const addExercise = async (
+  userId: string,
   exerciseData: ExerciseFields,
 ): Promise<ExerciseEntity> => {
   let exerciseTable = getFromLocalStorage<ExerciseTable>('exercises', {});
@@ -17,6 +18,7 @@ const addExercise = async (
   const id = String(exercises.length + 1);
   const createdExercise: ExerciseEntity = {
     id,
+    userId,
     ...exerciseData,
   };
 
@@ -103,7 +105,26 @@ const getAllExercises = async (): Promise<ExerciseEntity[]> => {
   return exercises;
 };
 
-const getExercisesByMonth = async (
+const getAllUserExercises = async (
+  userId: string,
+): Promise<ExerciseEntity[]> => {
+  const exerciseTable = getFromLocalStorage<ExerciseTable>('exercises', {});
+
+  const exercises: ExerciseEntity[] = [];
+  for (const monthRecord of Object.values(exerciseTable)) {
+    for (const dayExercises of Object.values(monthRecord)) {
+      const userExcercises = dayExercises.filter(
+        (exercise: ExerciseEntity): boolean => exercise.userId === userId,
+      );
+      exercises.push(...userExcercises);
+    }
+  }
+
+  return exercises;
+};
+
+const getUserExercisesByMonth = async (
+  userId: string,
   yearMonth: MonthString,
 ): Promise<ExerciseEntity[]> => {
   const exerciseTable = getFromLocalStorage<ExerciseTable>('exercises', {});
@@ -111,24 +132,35 @@ const getExercisesByMonth = async (
 
   const exercises: ExerciseEntity[] = [];
   for (const dayExercises of Object.values(monthRecord)) {
-    exercises.push(...dayExercises);
+    const userExcercises = dayExercises.filter(
+      (exercise: ExerciseEntity): boolean => exercise.userId === userId,
+    );
+    exercises.push(...userExcercises);
   }
 
   return exercises;
 };
 
-const getExercisesByDate = async (
+const getUserExercisesByDate = async (
+  userId: string,
   date: DateString,
 ): Promise<ExerciseEntity[]> => {
   const exerciseTable = getFromLocalStorage<ExerciseTable>('exercises', {});
   const yearMonth: MonthString = dayjs(date).format('YYYY-MM');
   const monthRecord = exerciseTable[yearMonth][date] || {};
-  return Object.values(monthRecord);
+  const dayExercises = Object.values(monthRecord);
+  const userExcercises = dayExercises.filter(
+    (exercise: ExerciseEntity): boolean => exercise.userId === userId,
+  );
+  return userExcercises;
 };
 
 const getExerciseById = async (id: string): Promise<ExerciseEntity | null> => {
-  const types = await ExerciseRepository.getAllExercises();
-  return types.find((type: ExerciseEntity): boolean => type.id === id) || null;
+  const exercises = await ExerciseRepository.getAllExercises();
+  return (
+    exercises.find((exercise: ExerciseEntity): boolean => exercise.id === id) ||
+    null
+  );
 };
 
 export const ExerciseRepository = {
@@ -136,7 +168,8 @@ export const ExerciseRepository = {
   updateExercise,
   deleteExercise,
   getAllExercises,
-  getExercisesByMonth,
-  getExercisesByDate,
+  getAllUserExercises,
+  getUserExercisesByMonth,
+  getUserExercisesByDate,
   getExerciseById,
 };

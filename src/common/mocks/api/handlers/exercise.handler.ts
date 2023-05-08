@@ -9,8 +9,17 @@ import {
 } from 'common/model/dto';
 import { isAuthenticated } from '../middleware';
 import { ExerciseFields, UpdateExerciseFields } from 'common/model/form-fields';
-import { DateString, MonthString, apiBaseUrl } from 'common/utils';
-import { ExerciseRepository, ExerciseTypeRepository } from 'common/mocks/repo';
+import {
+  DateString,
+  MonthString,
+  apiBaseUrl,
+  extractToken,
+} from 'common/utils';
+import {
+  ExerciseRepository,
+  ExerciseTypeRepository,
+  UserRepository,
+} from 'common/mocks/repo';
 import { ExerciseEntity, ExerciseTypeEntity } from 'common/mocks/entities';
 import { DayStatus } from 'features/calendar/types';
 import { ExerciseStatus } from 'common/types';
@@ -25,6 +34,11 @@ const createExerciseHandler: RestHandler = rest.post<
       return res(ctx.status(401), ctx.text('User is not authenticated'));
     }
 
+    const user = await UserRepository.getUserByToken(extractToken(req));
+    if (!user) {
+      return res(ctx.status(403), ctx.text('Invalid authentication token'));
+    }
+
     const exerciseData = await req.json<ExerciseFields>();
 
     const exerciseType: ExerciseTypeEntity | null =
@@ -34,7 +48,7 @@ const createExerciseHandler: RestHandler = rest.post<
     }
 
     const createdExercise: ExerciseEntity =
-      await ExerciseRepository.addExercise(exerciseData);
+      await ExerciseRepository.addExercise(user.id, exerciseData);
 
     if (!createdExercise) {
       return res(ctx.status(500), ctx.text('Failed to create new exercise'));
@@ -123,7 +137,7 @@ const deleteExerciseHandler: RestHandler = rest.delete<
   }
 });
 
-const getCalendarStatsHandler: RestHandler = rest.get<
+const getUserCalendarStatsHandler: RestHandler = rest.get<
   null,
   PathParams<string>,
   CalendarStatsDto | string
@@ -131,6 +145,11 @@ const getCalendarStatsHandler: RestHandler = rest.get<
   try {
     if (!isAuthenticated(req)) {
       return res(ctx.status(401), ctx.text('User is not authenticated'));
+    }
+
+    const user = await UserRepository.getUserByToken(extractToken(req));
+    if (!user) {
+      return res(ctx.status(403), ctx.text('Invalid authentication token'));
     }
 
     const currMonth = req.params.month as MonthString;
@@ -145,13 +164,16 @@ const getCalendarStatsHandler: RestHandler = rest.get<
       .add(+1, 'month')
       .format('YYYY-DD');
 
-    const currMonthExercises = await ExerciseRepository.getExercisesByMonth(
+    const currMonthExercises = await ExerciseRepository.getUserExercisesByMonth(
+      user.id,
       currMonth,
     );
-    const prevMonthExercises = await ExerciseRepository.getExercisesByMonth(
+    const prevMonthExercises = await ExerciseRepository.getUserExercisesByMonth(
+      user.id,
       prevMonth,
     );
-    const nextMonthExercises = await ExerciseRepository.getExercisesByMonth(
+    const nextMonthExercises = await ExerciseRepository.getUserExercisesByMonth(
+      user.id,
       nextMonth,
     );
     const exercises = [
@@ -234,7 +256,7 @@ const getExerciseHandler: RestHandler = rest.get<
   }
 });
 
-const getDayExercisesHandler: RestHandler = rest.get<
+const getUserDayExercisesHandler: RestHandler = rest.get<
   null,
   PathParams<string>,
   ExerciseDto[] | string
@@ -244,13 +266,18 @@ const getDayExercisesHandler: RestHandler = rest.get<
       return res(ctx.status(401), ctx.text('User is not authenticated'));
     }
 
+    const user = await UserRepository.getUserByToken(extractToken(req));
+    if (!user) {
+      return res(ctx.status(403), ctx.text('Invalid authentication token'));
+    }
+
     const date = req.params.date as DateString;
     if (!date) {
       return res(ctx.status(400), ctx.text('Date not specified'));
     }
 
     const exercises: ExerciseEntity[] =
-      await ExerciseRepository.getExercisesByDate(date);
+      await ExerciseRepository.getUserExercisesByDate(user.id, date);
     const exerciseTypes: ExerciseTypeEntity[] =
       await ExerciseTypeRepository.getAllTypes();
 
@@ -284,8 +311,8 @@ const getDayExercisesHandler: RestHandler = rest.get<
 
 export const excerciseHandlers = [
   getExerciseHandler,
-  getCalendarStatsHandler,
-  getDayExercisesHandler,
+  getUserCalendarStatsHandler,
+  getUserDayExercisesHandler,
   createExerciseHandler,
   updateExerciseHandler,
   deleteExerciseHandler,
