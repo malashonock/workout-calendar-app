@@ -1,4 +1,4 @@
-import { FunctionComponent, PropsWithChildren, ReactNode } from 'react';
+import { FunctionComponent, PropsWithChildren } from 'react';
 import { MenuItem, ListItemIcon } from '@mui/material';
 
 import styles from './UserMenuItem.module.scss';

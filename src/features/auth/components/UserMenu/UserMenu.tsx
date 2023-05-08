@@ -1,10 +1,8 @@
 import { FunctionComponent, useState } from 'react';
 import { Menu } from '@mui/material';
 
+import { UserMenuItemConfig, userMenuConfig } from './userMenuConfig';
 import { UserAccountButton, UserMenuItem } from '..';
-
-import styles from './UserMenu.module.scss';
-import { AccountCircle, Login, Logout, PersonAdd } from '@mui/icons-material';
 import { useAuth } from 'features/auth/hooks';
 
 export const UserMenu: FunctionComponent = () => {
@@ -58,39 +56,17 @@ export const UserMenu: FunctionComponent = () => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {token
-          ? [
-              <UserMenuItem
-                key="profile"
-                icon={<AccountCircle fontSize="small" />}
-                href="/user/profile"
-              >
-                User profile
-              </UserMenuItem>,
-              <UserMenuItem
-                key="logout"
-                icon={<Logout fontSize="small" />}
-                href="/auth/logout"
-              >
-                Log out
-              </UserMenuItem>,
-            ]
-          : [
-              <UserMenuItem
-                key="login"
-                icon={<Login fontSize="small" />}
-                href="/auth/login"
-              >
-                Log in
-              </UserMenuItem>,
-              <UserMenuItem
-                key="signup"
-                icon={<PersonAdd fontSize="small" />}
-                href="/user/register"
-              >
-                Sign up
-              </UserMenuItem>,
-            ]}
+        {userMenuConfig
+          .filter(({ isPrivate }: UserMenuItemConfig): boolean => {
+            return isPrivate === Boolean(token);
+          })
+          .map(
+            ({ label, icon, href }: UserMenuItemConfig): JSX.Element => (
+              <UserMenuItem key="label" icon={icon} href={href}>
+                {label}
+              </UserMenuItem>
+            ),
+          )}
       </Menu>
     </>
   );
