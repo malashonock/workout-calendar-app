@@ -18,7 +18,7 @@ import { UserFields } from 'common/model/form-fields';
 import styles from './UserForm.module.scss';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
-interface UserFormProps<TValues extends UserFields = UserFields> {
+interface UserFormProps<TValues extends Partial<UserFields> = UserFields> {
   avatar?: JSX.Element;
   title: string;
   initialValues: TValues;
@@ -43,7 +43,7 @@ const passwordValidation = {
   password: yup.string().required('Password is required'),
 };
 
-export const UserForm = <TValues extends UserFields = UserFields>({
+export const UserForm = <TValues extends Partial<UserFields> = UserFields>({
   avatar = <LockOutlinedIcon />,
   title,
   initialValues,

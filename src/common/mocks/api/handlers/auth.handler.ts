@@ -26,6 +26,7 @@ const loginHandler: RestHandler = rest.post<
     }
 
     const authData: AuthDto = {
+      userId: user.id,
       token: user.token,
     };
 

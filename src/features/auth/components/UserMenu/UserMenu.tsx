@@ -62,7 +62,7 @@ export const UserMenu: FunctionComponent = () => {
           })
           .map(
             ({ label, icon, href }: UserMenuItemConfig): JSX.Element => (
-              <UserMenuItem key="label" icon={icon} href={href}>
+              <UserMenuItem key={label} icon={icon} href={href}>
                 {label}
               </UserMenuItem>
             ),
