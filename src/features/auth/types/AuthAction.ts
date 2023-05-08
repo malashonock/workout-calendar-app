@@ -3,15 +3,15 @@ import { AuthState } from './AuthState';
 export type AuthAction = LoginAction | LogoutAction;
 
 export interface LoginAction {
-  type: ActionType.Login;
+  type: AuthActionType.Login;
   payload: Required<AuthState>;
 }
 
 export interface LogoutAction {
-  type: ActionType.Logout;
+  type: AuthActionType.Logout;
 }
 
-export enum ActionType {
+export enum AuthActionType {
   Login = 'login',
   Logout = 'logout',
 }

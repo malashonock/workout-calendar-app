@@ -9,7 +9,7 @@ import {
 import { UserDto } from 'common/model/dto';
 import { getFromLocalStorage, saveToLocalStorage } from 'common/utils';
 import {
-  ActionType,
+  AuthActionType,
   AuthAction,
   AuthContextType,
   AuthState,
@@ -21,9 +21,9 @@ export const AuthContext = createContext<AuthContextType>({
 
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
-    case ActionType.Login:
+    case AuthActionType.Login:
       return action.payload;
-    case ActionType.Logout:
+    case AuthActionType.Logout:
     default:
       return {};
   }
