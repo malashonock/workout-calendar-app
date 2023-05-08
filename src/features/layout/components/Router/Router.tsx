@@ -40,6 +40,10 @@ const routes: JSX.Element = (
     </Route>
     <Route path="auth">
       <Route path="signup" element={<SignupPage />} />
+      <Route
+        path="userprofile"
+        element={<Typography>User profile page</Typography>}
+      />
       <Route path="login" element={<LoginPage />} />
       <Route path="logout" element={<Logout />} />
     </Route>
