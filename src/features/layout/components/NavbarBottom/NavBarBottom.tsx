@@ -1,30 +1,21 @@
-import { FunctionComponent, useCallback, useState } from 'react';
+import { FunctionComponent } from 'react';
 import { AppBar, Container, Toolbar } from '@mui/material';
 
 import { NavTabs, NavTabsVariant } from '..';
 import { useScreenWidth } from '../../hooks';
 
 import styles from './NavbarBottom.module.scss';
+import { useShowNavTabs } from 'features/layout/hooks/useShowNavTabs';
 
 export const NavbarBottom: FunctionComponent = () => {
-  const [show, setShow] = useState(true);
   const { isMobileScreen } = useScreenWidth();
-
-  const onTabSelectionLost = useCallback(
-    (selectionLost: boolean) => {
-      setShow(!selectionLost);
-    },
-    [setShow],
-  );
+  const show = useShowNavTabs();
 
   return show && isMobileScreen ? (
-    <AppBar position="static" className={styles.wrapper}>
+    <AppBar position="sticky" className={styles.wrapper}>
       <Container maxWidth="lg">
         <Toolbar className={styles.content}>
-          <NavTabs
-            variant={NavTabsVariant.Bottom}
-            onSelectionLost={onTabSelectionLost}
-          />
+          <NavTabs variant={NavTabsVariant.Bottom} />
         </Toolbar>
       </Container>
     </AppBar>

@@ -15,26 +15,11 @@ export enum NavTabsVariant {
 
 interface NavTabsProps {
   variant: NavTabsVariant;
-  onSelectionLost?: (selectionLost: boolean) => void;
 }
 
 export const NavTabs: FunctionComponent<NavTabsProps> = memo(
-  ({ variant, onSelectionLost }: NavTabsProps) => {
-    const { pathname } = useLocation();
+  ({ variant }: NavTabsProps) => {
     const [activeTabIndex, setActiveTabIndex] = useState(0);
-
-    useEffect(() => {
-      const newTabIndex = tabsConfig.findIndex(({ to }: TabConfig): boolean =>
-        pathname.startsWith(to),
-      );
-
-      if (newTabIndex > -1) {
-        setActiveTabIndex(newTabIndex);
-        onSelectionLost?.call(null, false);
-      } else {
-        onSelectionLost?.call(null, true);
-      }
-    }, [pathname]);
 
     const { isWideScreen } = useScreenWidth();
 

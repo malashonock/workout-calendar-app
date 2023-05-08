@@ -1,4 +1,4 @@
-import { FunctionComponent, useCallback, useState } from 'react';
+import { FunctionComponent } from 'react';
 import { AppBar, Box, Container, Toolbar } from '@mui/material';
 
 import { Logo, NavTabs, NavTabsVariant } from '..';
@@ -6,17 +6,11 @@ import { UserMenu } from 'features/auth/components';
 import { useScreenWidth } from '../../hooks';
 
 import styles from './NavbarTop.module.scss';
+import { useShowNavTabs } from 'features/layout/hooks/useShowNavTabs';
 
 export const NavbarTop: FunctionComponent = () => {
-  const [showTabs, setShowTabs] = useState(true);
   const { isMobileScreen } = useScreenWidth();
-
-  const onTabSelectionLost = useCallback(
-    (selectionLost: boolean) => {
-      setShowTabs(!selectionLost);
-    },
-    [setShowTabs],
-  );
+  const showTabs = useShowNavTabs();
 
   return (
     <AppBar position="sticky" className={styles.wrapper}>
@@ -26,10 +20,7 @@ export const NavbarTop: FunctionComponent = () => {
             <Logo />
           </Box>
           {showTabs && !isMobileScreen && (
-            <NavTabs
-              variant={NavTabsVariant.Top}
-              onSelectionLost={onTabSelectionLost}
-            />
+            <NavTabs variant={NavTabsVariant.Top} />
           )}
           <Box className={styles.userAccountBtn}>
             <UserMenu />
