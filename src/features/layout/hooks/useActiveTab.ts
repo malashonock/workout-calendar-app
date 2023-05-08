@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+
 import { TabConfig, tabsConfig } from '../components/NavTabs';
 
-export const useShowNavTabs = (): boolean => {
+export const useActiveTab = (
+  effect?: (activeTabIndex: number) => void,
+): number => {
   const { pathname } = useLocation();
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
@@ -12,7 +15,8 @@ export const useShowNavTabs = (): boolean => {
     );
 
     setActiveTabIndex(newTabIndex);
-  }, [pathname]);
+    effect?.call(null, activeTabIndex);
+  }, [pathname, effect]);
 
-  return activeTabIndex > -1;
+  return activeTabIndex;
 };

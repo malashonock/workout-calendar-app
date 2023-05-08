@@ -1,9 +1,9 @@
 import { FunctionComponent, memo, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Tabs, Tab } from '@mui/material';
 import cn from 'classnames';
 
-import { useScreenWidth } from '../../hooks';
+import { useActiveTab, useScreenWidth } from '../../hooks';
 import { TabConfig, tabsConfig } from './navTabsConfig';
 
 import styles from './NavTabs.module.scss';
@@ -20,6 +20,9 @@ interface NavTabsProps {
 export const NavTabs: FunctionComponent<NavTabsProps> = memo(
   ({ variant }: NavTabsProps) => {
     const [activeTabIndex, setActiveTabIndex] = useState(0);
+    const navigate = useNavigate();
+
+    useActiveTab((newTabIndex: number) => setActiveTabIndex(newTabIndex));
 
     const { isWideScreen } = useScreenWidth();
 
@@ -27,7 +30,7 @@ export const NavTabs: FunctionComponent<NavTabsProps> = memo(
       event: React.SyntheticEvent,
       newTabIndex: number,
     ) => {
-      setActiveTabIndex(newTabIndex);
+      navigate(tabsConfig[newTabIndex].to);
     };
 
     return (

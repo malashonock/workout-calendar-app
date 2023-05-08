@@ -5,11 +5,13 @@ import { NavTabs, NavTabsVariant } from '..';
 import { useScreenWidth } from '../../hooks';
 
 import styles from './NavbarBottom.module.scss';
-import { useShowNavTabs } from 'features/layout/hooks/useShowNavTabs';
+import { useActiveTab } from '../../hooks';
 
 export const NavbarBottom: FunctionComponent = () => {
   const { isMobileScreen } = useScreenWidth();
-  const show = useShowNavTabs();
+
+  const activeTabIndex = useActiveTab();
+  const show = activeTabIndex > -1;
 
   return show && isMobileScreen ? (
     <AppBar position="sticky" className={styles.wrapper}>

@@ -3,14 +3,15 @@ import { AppBar, Box, Container, Toolbar } from '@mui/material';
 
 import { Logo, NavTabs, NavTabsVariant } from '..';
 import { UserMenu } from 'features/auth/components';
-import { useScreenWidth } from '../../hooks';
+import { useScreenWidth, useActiveTab } from '../../hooks';
 
 import styles from './NavbarTop.module.scss';
-import { useShowNavTabs } from 'features/layout/hooks/useShowNavTabs';
 
 export const NavbarTop: FunctionComponent = () => {
   const { isMobileScreen } = useScreenWidth();
-  const showTabs = useShowNavTabs();
+
+  const activeTabIndex = useActiveTab();
+  const showTabs = activeTabIndex > -1;
 
   return (
     <AppBar position="sticky" className={styles.wrapper}>
