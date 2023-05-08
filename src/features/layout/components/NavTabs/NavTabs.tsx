@@ -4,35 +4,9 @@ import { Tabs, Tab } from '@mui/material';
 import cn from 'classnames';
 
 import { useScreenWidth } from '../../hooks';
+import { TabConfig, tabsConfig } from './navTabsConfig';
 
 import styles from './NavTabs.module.scss';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import ChecklistIcon from '@mui/icons-material/Checklist';
-import QueryStatsIcon from '@mui/icons-material/QueryStats';
-
-interface TabConfig {
-  to: string;
-  label: string;
-  icon: JSX.Element;
-}
-
-const tabs: TabConfig[] = [
-  {
-    to: '/calendar',
-    label: 'Calendar',
-    icon: <CalendarMonthIcon />,
-  },
-  {
-    to: '/tracker',
-    label: 'Tracker',
-    icon: <ChecklistIcon />,
-  },
-  {
-    to: '/stats',
-    label: 'Stats',
-    icon: <QueryStatsIcon />,
-  },
-];
 
 export enum NavTabsVariant {
   Top = 'top',
@@ -50,7 +24,7 @@ export const NavTabs: FunctionComponent<NavTabsProps> = memo(
     const [activeTabIndex, setActiveTabIndex] = useState(0);
 
     useEffect(() => {
-      const newTabIndex = tabs.findIndex(({ to }: TabConfig): boolean =>
+      const newTabIndex = tabsConfig.findIndex(({ to }: TabConfig): boolean =>
         pathname.startsWith(to),
       );
 
@@ -80,7 +54,7 @@ export const NavTabs: FunctionComponent<NavTabsProps> = memo(
         variant={variant === NavTabsVariant.Bottom ? 'fullWidth' : 'standard'}
         centered
       >
-        {tabs.map(
+        {tabsConfig.map(
           ({ to, label, icon }: TabConfig): JSX.Element => (
             <Tab
               key={to}
