@@ -2,7 +2,7 @@ import { apiBaseUrl } from '.';
 
 export enum MutationMethod {
   POST = 'POST',
-  PUT = 'PUT',
+  PATCH = 'PATCH',
   DELETE = 'DELETE',
 }
 
