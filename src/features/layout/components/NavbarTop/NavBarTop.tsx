@@ -1,7 +1,8 @@
 import { FunctionComponent, useCallback, useState } from 'react';
 import { AppBar, Box, Container, Toolbar } from '@mui/material';
 
-import { Logo, NavTabs, NavTabsVariant, UserAccountButton } from '..';
+import { Logo, NavTabs, NavTabsVariant } from '..';
+import { UserMenu } from 'features/auth/components';
 import { useScreenWidth } from '../../hooks';
 
 import styles from './NavbarTop.module.scss';
@@ -31,7 +32,7 @@ export const NavbarTop: FunctionComponent = () => {
             />
           )}
           <Box className={styles.userAccountBtn}>
-            <UserAccountButton />
+            <UserMenu />
           </Box>
         </Toolbar>
       </Container>
