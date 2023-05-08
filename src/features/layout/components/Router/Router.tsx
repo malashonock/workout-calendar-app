@@ -11,6 +11,7 @@ import dayjs from 'dayjs';
 
 import { Layout } from '..';
 import { CalendarPage, calendarLoader } from 'features/calendar/components';
+import { SignupPage } from 'features/auth/components';
 
 const routes: JSX.Element = (
   <Route path="/" element={<Layout />}>
@@ -37,6 +38,11 @@ const routes: JSX.Element = (
       />
       <Route path=":date" element={<Typography>Tracker page</Typography>} />
     </Route>
+    <Route
+      path="auth/signup"
+      element={<SignupPage />}
+      errorElement={<>Oops... An error occurred</>}
+    />
     <Route path="stats" element={<Typography>Stats page</Typography>} />
     <Route path="404" element={<Typography>Page not found</Typography>} />
     <Route path="*" element={<Navigate to="/404" replace />} />

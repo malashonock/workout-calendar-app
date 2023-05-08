@@ -10,8 +10,8 @@ export const Layout: FunctionComponent = () => {
   return (
     <Stack className={styles.wrapper}>
       <NavbarTop />
-      <Box className={styles.main}>
-        <Container maxWidth="lg">
+      <Box className={styles.mainWrapper}>
+        <Container maxWidth="lg" className={styles.mainContent}>
           <Outlet />
         </Container>
       </Box>

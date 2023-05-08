@@ -19,7 +19,7 @@ export const NavbarTop: FunctionComponent = () => {
   );
 
   return (
-    <AppBar position="static" className={styles.wrapper}>
+    <AppBar position="sticky" className={styles.wrapper}>
       <Container maxWidth="lg">
         <Toolbar className={styles.content}>
           <Box className={styles.logo}>
