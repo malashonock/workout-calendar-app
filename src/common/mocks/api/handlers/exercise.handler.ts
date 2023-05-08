@@ -196,7 +196,7 @@ const getUserCalendarStatsHandler: RestHandler = rest.get<
           return DayStatus.ToDo;
         }
 
-        const allDone: boolean = exercises.every(
+        const allDone: boolean = dayExercises.every(
           (exercise: ExerciseEntity): boolean =>
             exercise.status === ExerciseStatus.Done,
         );

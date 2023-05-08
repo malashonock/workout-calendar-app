@@ -47,7 +47,7 @@ const getExercise = async (id: string, token: string): Promise<ExerciseDto> => {
   return exercise;
 };
 
-const getDayExercises = async (
+const getUserDayExercises = async (
   date: DateString,
   token: string,
 ): Promise<ExerciseDto[]> => {
@@ -58,7 +58,7 @@ const getDayExercises = async (
   return exercises;
 };
 
-const getCalendarStats = async (
+const getUserCalendarStats = async (
   month: MonthString,
   token: string,
 ): Promise<CalendarStatsDto> => {
@@ -74,6 +74,6 @@ export const ExerciseService = {
   updateExercise,
   deleteExercise,
   getExercise,
-  getDayExercises,
-  getCalendarStats,
+  getUserDayExercises,
+  getUserCalendarStats,
 };
