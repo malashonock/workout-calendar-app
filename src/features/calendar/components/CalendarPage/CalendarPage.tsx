@@ -1,11 +1,6 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 import { Paper } from '@mui/material';
-import {
-  useParams,
-  useNavigate,
-  LoaderFunction,
-  useLoaderData,
-} from 'react-router-dom';
+import { useParams, useNavigate, useLoaderData } from 'react-router-dom';
 import dayjs, { Dayjs } from 'dayjs';
 import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -14,27 +9,6 @@ import { CalendarDay } from '..';
 import { DayResult } from '../../types';
 
 import styles from './CalendarPage.module.scss';
-import { CalendarService } from '../services';
-
-export const calendarLoader: LoaderFunction = async ({
-  params,
-}): Promise<DayResult[]> => {
-  const { yearMonth } = params;
-
-  if (!yearMonth) {
-    throw new Error('No year/month provided');
-  }
-
-  const [year, month] = yearMonth
-    .split('-')
-    .map((segment: string): number => Number(segment));
-
-  if (!year || !month) {
-    throw new Error('Invalid year/month');
-  }
-
-  return await CalendarService.getMonthResults(year, month);
-};
 
 export const CalendarPage: FunctionComponent = () => {
   const navigate = useNavigate();
