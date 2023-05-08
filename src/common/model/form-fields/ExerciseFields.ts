@@ -8,3 +8,5 @@ export interface ExerciseFields {
   setsCount?: number;
   status: ExerciseStatus;
 }
+
+export type UpdateExerciseFields = Partial<Omit<ExerciseFields, 'date'>>;

@@ -8,7 +8,7 @@ import {
   ExerciseTypeDto,
 } from 'common/model/dto';
 import { isAuthenticated } from '../middleware';
-import { ExerciseFields } from 'common/model/form-fields';
+import { ExerciseFields, UpdateExerciseFields } from 'common/model/form-fields';
 import { DateString, MonthString, apiBaseUrl } from 'common/utils';
 import { ExerciseRepository, ExerciseTypeRepository } from 'common/mocks/repo';
 import { ExerciseEntity, ExerciseTypeEntity } from 'common/mocks/entities';
@@ -54,7 +54,7 @@ const createExerciseHandler: RestHandler = rest.post<
 });
 
 const updateExerciseHandler: RestHandler = rest.patch<
-  Partial<Omit<ExerciseFields, 'date'>>,
+  UpdateExerciseFields,
   PathParams<string>,
   ExerciseDto | string
 >(`${apiBaseUrl}/exercises/:exerciseId`, async (req, res, ctx) => {
@@ -68,9 +68,7 @@ const updateExerciseHandler: RestHandler = rest.patch<
       return res(ctx.status(400), ctx.text('Exercise id not specified'));
     }
 
-    const exerciseData = await req.json<
-      Partial<Omit<ExerciseFields, 'date'>>
-    >();
+    const exerciseData = await req.json<UpdateExerciseFields>();
 
     if (exerciseData.exerciseTypeId) {
       const exerciseType: ExerciseTypeEntity | null =
