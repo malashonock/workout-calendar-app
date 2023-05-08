@@ -10,6 +10,17 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import '@fontsource/permanent-marker';
+import { ExerciseTypeRepository } from 'common/mocks/repo';
+
+// Launch mock API if in development
+if (process.env.NODE_ENV === 'development') {
+  const { worker } = require('./common/mocks/api/worker');
+  worker.start();
+
+  (async () => {
+    await ExerciseTypeRepository.seedTypes();
+  })();
+}
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
