@@ -28,7 +28,7 @@ export const CalendarDay: FunctionComponent<CalendarDayProps> = ({
   const tooltipTitle = ((): string | undefined => {
     if (isToDo) return 'You have a workout scheduled on this day';
     if (isDone)
-      return 'Well done! You did all scheduled excercises for this day';
+      return 'Well done! You did all scheduled exercises for this day';
     if (isMissed) return "You missed your workout, don't give up!";
   })();
 
