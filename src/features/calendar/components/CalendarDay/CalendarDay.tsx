@@ -4,12 +4,13 @@ import { PickersDay, PickersDayProps } from '@mui/x-date-pickers';
 import { Dayjs } from 'dayjs';
 import cn from 'classnames';
 
-import { DayResult, DayStatus } from '../../types';
+import { DayStatus } from '../../types';
 
 import styles from './CalendarDay.module.scss';
+import { CalendarStatsDto } from 'common/model/dto';
 
 interface CalendarDayProps extends PickersDayProps<Dayjs> {
-  monthResults: DayResult[];
+  monthResults: CalendarStatsDto;
 }
 
 export const CalendarDay: FunctionComponent<CalendarDayProps> = ({
@@ -17,13 +18,11 @@ export const CalendarDay: FunctionComponent<CalendarDayProps> = ({
   monthResults,
   ...otherProps
 }) => {
-  const dayResult = monthResults.find(
-    ({ date }: DayResult): boolean => date === day.format('YYYY-MM-DD'),
-  );
+  const dayStatus = monthResults[day.format('YYYY-MM-DD')];
 
-  const isToDo = dayResult?.status === DayStatus.ToDo;
-  const isDone = dayResult?.status === DayStatus.Done;
-  const isMissed = dayResult?.status === DayStatus.Missed;
+  const isToDo = dayStatus === DayStatus.ToDo;
+  const isDone = dayStatus === DayStatus.Done;
+  const isMissed = dayStatus === DayStatus.Missed;
 
   const tooltipTitle = ((): string | undefined => {
     if (isToDo) return 'You have a workout scheduled on this day';

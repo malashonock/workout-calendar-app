@@ -6,13 +6,13 @@ import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import { CalendarDay } from '..';
-import { DayResult } from '../../types';
+import { CalendarStatsDto } from 'common/model/dto';
 
 import styles from './CalendarPage.module.scss';
 
 export const CalendarPage: FunctionComponent = () => {
   const navigate = useNavigate();
-  const monthResults = useLoaderData() as DayResult[];
+  const monthResults = useLoaderData() as CalendarStatsDto;
 
   const { yearMonth } = useParams();
   const [currentMonth, setCurrentMonth] = useState<Dayjs | undefined>(

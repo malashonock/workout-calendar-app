@@ -12,8 +12,9 @@ import dayjs from 'dayjs';
 import { Layout } from '..';
 import { CalendarPage, calendarLoader } from 'features/calendar/components';
 import { LoginPage, Logout, SignupPage } from 'features/auth/components';
+import { useAuth } from 'features/auth/hooks';
 
-const routes: JSX.Element = (
+const routes = (authToken?: string): JSX.Element => (
   <Route path="/" element={<Layout />}>
     <Route index element={<Navigate to="/calendar" />} />
     <Route path="calendar">
@@ -26,7 +27,7 @@ const routes: JSX.Element = (
       <Route
         path=":yearMonth"
         element={<CalendarPage />}
-        loader={calendarLoader}
+        loader={calendarLoader(authToken)}
       />
     </Route>
     <Route path="tracker">
@@ -53,8 +54,11 @@ const routes: JSX.Element = (
   </Route>
 );
 
-const router = createBrowserRouter(createRoutesFromElements(routes));
+const router = (authToken?: string) =>
+  createBrowserRouter(createRoutesFromElements(routes(authToken)));
 
 export const Router: FunctionComponent = () => {
-  return <RouterProvider router={router} />;
+  const { token } = useAuth();
+
+  return <RouterProvider router={router(token)} />;
 };
