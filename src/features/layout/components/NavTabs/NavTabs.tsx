@@ -1,5 +1,5 @@
-import { FunctionComponent, memo, useEffect, useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { FunctionComponent, memo, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import { Tabs, Tab } from '@mui/material';
 import cn from 'classnames';
 
