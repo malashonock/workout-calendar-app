@@ -1,7 +1,11 @@
 export const getFromLocalStorage = <T>(key: string, fallback: T): T => {
-  const stringified = window.localStorage.getItem(key);
-  const parsed = stringified ? (JSON.parse(stringified) as T) : fallback;
-  return parsed;
+  try {
+    const stringified = window.localStorage.getItem(key);
+    const parsed = stringified ? JSON.parse(stringified) : null;
+    return (parsed as T) ?? fallback;
+  } catch (error) {
+    return fallback;
+  }
 };
 
 export const saveToLocalStorage = <T>(key: string, value: T): void => {
