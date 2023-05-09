@@ -1,6 +1,7 @@
 @import 'styles/_globals.scss';
 
 .wrapper {
+  width: calc($board-column-width * 3 + 24px * 4);
   padding: 24px;
   display: flex;
   flex-direction: column;
@@ -21,7 +22,6 @@
 
 .board {
   position: relative;
-  width: calc($board-column-width * 3 + 24px * 4);
   display: flex;
   flex-direction: row;
   gap: 24px;
