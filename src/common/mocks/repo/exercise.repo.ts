@@ -1,4 +1,4 @@
-import { ExerciseFields, UpdateExerciseFields } from 'common/model/form-fields';
+import { ExerciseFields } from 'common/model/form-fields';
 import { ExerciseEntity, ExerciseTable } from '../entities';
 import {
   DateString,
@@ -38,7 +38,7 @@ const addExercise = async (
 
 const updateExercise = async (
   id: string,
-  exerciseData: UpdateExerciseFields,
+  exerciseData: ExerciseFields,
 ): Promise<ExerciseEntity> => {
   let updatedExercise = await ExerciseRepository.getExerciseById(id);
   if (!updatedExercise) {

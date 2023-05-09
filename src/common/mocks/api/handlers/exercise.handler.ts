@@ -8,7 +8,7 @@ import {
   ExerciseTypeDto,
 } from 'common/model/dto';
 import { isAuthenticated } from '../middleware';
-import { ExerciseFields, UpdateExerciseFields } from 'common/model/form-fields';
+import { ExerciseFields } from 'common/model/form-fields';
 import {
   DateString,
   MonthString,
@@ -68,7 +68,7 @@ const createExerciseHandler: RestHandler = rest.post<
 });
 
 const updateExerciseHandler: RestHandler = rest.patch<
-  UpdateExerciseFields,
+  ExerciseFields,
   PathParams<string>,
   ExerciseDto | string
 >(`${apiBaseUrl}/exercises/:exerciseId`, async (req, res, ctx) => {
@@ -82,7 +82,7 @@ const updateExerciseHandler: RestHandler = rest.patch<
       return res(ctx.status(400), ctx.text('Exercise id not specified'));
     }
 
-    const exerciseData = await req.json<UpdateExerciseFields>();
+    const exerciseData = await req.json<ExerciseFields>();
 
     if (exerciseData.exerciseTypeId) {
       const exerciseType: ExerciseTypeEntity | null =

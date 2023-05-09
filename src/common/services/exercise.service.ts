@@ -1,4 +1,4 @@
-import { ExerciseFields, UpdateExerciseFields } from 'common/model/form-fields';
+import { ExerciseFields } from 'common/model/form-fields';
 import { CalendarStatsDto, ExerciseDto } from 'common/model/dto';
 import {
   DateString,
@@ -20,21 +20,21 @@ const createExercise = async (
 
 const updateExercise = async (
   id: string,
-  exerciseData: UpdateExerciseFields,
+  exerciseData: ExerciseFields,
   token: string,
 ): Promise<ExerciseDto> => {
   const updatedExercise = await FetchService.runMutation<
-    UpdateExerciseFields,
+    ExerciseFields,
     ExerciseDto
   >(`/exercises/${id}`, MutationMethod.PATCH, exerciseData, token);
   return updatedExercise;
 };
 
 const deleteExercise = async (id: string, token: string): Promise<void> => {
-  await FetchService.runMutation<UpdateExerciseFields, ExerciseDto>(
+  await FetchService.runMutation<null, ExerciseDto>(
     `/exercises/${id}`,
     MutationMethod.DELETE,
-    {},
+    null,
     token,
   );
 };
