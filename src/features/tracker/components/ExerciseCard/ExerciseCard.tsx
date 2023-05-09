@@ -63,6 +63,7 @@ export const ExerciseCard: FunctionComponent<TaskProps> = ({
               color="warning"
               size="small"
               onClick={handleEdit}
+              title="Edit exercise"
             >
               <Edit className={styles.actionButtonIcon} />
             </IconButton>
@@ -71,6 +72,7 @@ export const ExerciseCard: FunctionComponent<TaskProps> = ({
               color="error"
               size="small"
               onClick={handleDelete}
+              title="Delete exercise"
             >
               <Delete className={styles.actionButtonIcon} />
             </IconButton>

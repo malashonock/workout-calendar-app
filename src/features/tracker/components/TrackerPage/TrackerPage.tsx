@@ -177,6 +177,7 @@ export const TrackerPage: FunctionComponent = () => {
             ({ status, title }: BoardColumnConfig): JSX.Element => (
               <BoardColumn
                 key={status}
+                status={status}
                 title={title}
                 exercises={exercises.filter(
                   (exercise: ExerciseDto): boolean =>
