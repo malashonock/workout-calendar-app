@@ -41,7 +41,7 @@ const addExercise = async (
 
 const updateExercise = async (
   id: string,
-  exerciseData: ExerciseFields,
+  exerciseData: Partial<ExerciseFields>,
 ): Promise<ExerciseEntity> => {
   let updatedExercise = await ExerciseRepository.getExerciseById(id);
   if (!updatedExercise) {
@@ -60,11 +60,11 @@ const updateExercise = async (
     ...exerciseTable,
     [yearMonth]: {
       ...exerciseTable[yearMonth],
-      [date]:
-        (exerciseTable[yearMonth] ?? {})[date] ??
-        [].map((exercise: ExerciseEntity): ExerciseEntity => {
-          return exercise.id === id ? exercise : updatedExercise!;
-        }),
+      [date]: ((exerciseTable[yearMonth] ?? {})[date] ?? []).map(
+        (exercise: ExerciseEntity): ExerciseEntity => {
+          return exercise.id === id ? updatedExercise! : exercise;
+        },
+      ),
     },
   };
   saveToLocalStorage('exercises', exerciseTable);
@@ -85,11 +85,11 @@ const deleteExercise = async (id: string): Promise<void> => {
     ...exerciseTable,
     [yearMonth]: {
       ...exerciseTable[yearMonth],
-      [date]:
-        (exerciseTable[yearMonth] ?? {})[date] ??
-        [].filter((exercise: ExerciseEntity): boolean => {
+      [date]: ((exerciseTable[yearMonth] ?? {})[date] ?? []).filter(
+        (exercise: ExerciseEntity): boolean => {
           return exercise.id !== deletedExercise!.id;
-        }),
+        },
+      ),
     },
   };
   saveToLocalStorage('exercises', exerciseTable);

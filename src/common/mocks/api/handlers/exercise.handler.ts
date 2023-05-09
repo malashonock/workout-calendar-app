@@ -68,7 +68,7 @@ const createExerciseHandler: RestHandler = rest.post<
 });
 
 const updateExerciseHandler: RestHandler = rest.patch<
-  ExerciseFields,
+  Partial<ExerciseFields>,
   PathParams<string>,
   ExerciseDto | string
 >(`${apiBaseUrl}/exercises/:exerciseId`, async (req, res, ctx) => {
@@ -190,7 +190,7 @@ const getUserCalendarStatsHandler: RestHandler = rest.get<
         }
 
         const isFutureDate: boolean = dayjs(dayExercises[0].date).isAfter(
-          dayjs(new Date()),
+          dayjs(new Date()).add(-1, 'day'),
         );
         if (isFutureDate) {
           return DayStatus.ToDo;

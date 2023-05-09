@@ -20,11 +20,11 @@ const createExercise = async (
 
 const updateExercise = async (
   id: string,
-  exerciseData: ExerciseFields,
+  exerciseData: Partial<ExerciseFields>,
   token: string,
 ): Promise<ExerciseDto> => {
   const updatedExercise = await FetchService.runMutation<
-    ExerciseFields,
+    Partial<ExerciseFields>,
     ExerciseDto
   >(`/exercises/${id}`, MutationMethod.PATCH, exerciseData, token);
   return updatedExercise;
