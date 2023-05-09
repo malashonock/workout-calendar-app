@@ -1,12 +1,16 @@
-import { CSSProperties, FunctionComponent, MouseEvent, useState } from 'react';
-import { Box, Card, IconButton, Typography } from '@mui/material';
+import { CSSProperties, FunctionComponent, useState } from 'react';
+import { useRevalidator } from 'react-router-dom';
+import { Card, IconButton, Typography } from '@mui/material';
 import { Draggable, DraggableProvided } from 'react-beautiful-dnd';
 import cn from 'classnames';
 
+import { ExerciseDto } from 'common/model/dto';
+import { EditExerciseDialog, ConfirmDeleteExerciseDialog } from '..';
+import { ExerciseService } from 'common/services';
+import { useAuth } from 'features/auth/hooks';
+
 import styles from './ExerciseCard.module.scss';
 import { Delete, Edit } from '@mui/icons-material';
-import { ExerciseDto } from 'common/model/dto';
-import { EditExerciseDialog } from '../EditExerciseDialog';
 
 interface TaskProps {
   exercise: ExerciseDto;
@@ -17,19 +21,48 @@ export const ExerciseCard: FunctionComponent<TaskProps> = ({
   exercise,
   index,
 }: TaskProps): JSX.Element => {
+  const { token } = useAuth();
+  const revalidator = useRevalidator();
+
   const { id, exerciseType, effort, setsCount } = exercise;
 
-  const [editExerciseDialogOpen, setEditExerciseDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [confirmDeleteDialogOpen, setConfirmDeleteDialogOpen] = useState(false);
 
-  const handleEditExerciseDialogClose = (): void => {
-    setEditExerciseDialogOpen(false);
+  const handleOpenEditDialog = (): void => {
+    setEditDialogOpen(true);
   };
 
-  const handleOpenEditExerciseDialog = (): void => {
-    setEditExerciseDialogOpen(true);
+  const handleEditDialogClose = (): void => {
+    setEditDialogOpen(false);
   };
 
-  const handleDelete = (): void => {};
+  const handleOpenConfirmDeleteDialog = (): void => {
+    setConfirmDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDeleteDialogClose = async (
+    deleteConfirmed: boolean,
+  ): Promise<void> => {
+    setConfirmDeleteDialogOpen(false);
+
+    if (deleteConfirmed) {
+      await handleDelete();
+    }
+  };
+
+  const handleDelete = async (): Promise<void> => {
+    try {
+      if (!token) {
+        throw new Error('User not authenticated');
+      }
+
+      await ExerciseService.deleteExercise(exercise.id, token);
+      revalidator.revalidate();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -56,7 +89,7 @@ export const ExerciseCard: FunctionComponent<TaskProps> = ({
               className={cn(styles.actionButton, styles.editButton)}
               color="warning"
               size="small"
-              onClick={handleOpenEditExerciseDialog}
+              onClick={handleOpenEditDialog}
               title="Edit exercise"
             >
               <Edit className={styles.actionButtonIcon} />
@@ -65,7 +98,7 @@ export const ExerciseCard: FunctionComponent<TaskProps> = ({
               className={cn(styles.actionButton, styles.deleteButton)}
               color="error"
               size="small"
-              onClick={handleDelete}
+              onClick={handleOpenConfirmDeleteDialog}
               title="Delete exercise"
             >
               <Delete className={styles.actionButtonIcon} />
@@ -75,8 +108,12 @@ export const ExerciseCard: FunctionComponent<TaskProps> = ({
       </Draggable>
       <EditExerciseDialog
         exercise={exercise}
-        open={editExerciseDialogOpen}
-        onClose={handleEditExerciseDialogClose}
+        open={editDialogOpen}
+        onClose={handleEditDialogClose}
+      />
+      <ConfirmDeleteExerciseDialog
+        open={confirmDeleteDialogOpen}
+        onClose={handleConfirmDeleteDialogClose}
       />
       {/* {callingForm && modalType === 'view' && (
         <ModalTasks
