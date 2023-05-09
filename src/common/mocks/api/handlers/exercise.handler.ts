@@ -159,10 +159,10 @@ const getUserCalendarStatsHandler: RestHandler = rest.get<
 
     const prevMonth: MonthString = dayjs(currMonth)
       .add(-1, 'month')
-      .format('YYYY-DD');
+      .format('YYYY-MM');
     const nextMonth: MonthString = dayjs(currMonth)
       .add(+1, 'month')
-      .format('YYYY-DD');
+      .format('YYYY-MM');
 
     const currMonthExercises = await ExerciseRepository.getUserExercisesByMonth(
       user.id,

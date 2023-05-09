@@ -23,12 +23,15 @@ const addExercise = async (
   };
 
   const { date } = exerciseData;
-  const yearMonth: MonthString = dayjs(date).format('YYYY-DD');
+  const yearMonth: MonthString = dayjs(date).format('YYYY-MM');
   exerciseTable = {
     ...exerciseTable,
     [yearMonth]: {
       ...exerciseTable[yearMonth],
-      [date]: [...exerciseTable[yearMonth][date], createdExercise],
+      [date]: [
+        ...((exerciseTable[yearMonth] ?? {})[date] ?? []),
+        createdExercise,
+      ],
     },
   };
   saveToLocalStorage('exercises', exerciseTable);
@@ -52,16 +55,16 @@ const updateExercise = async (
 
   let exerciseTable = getFromLocalStorage<ExerciseTable>('exercises', {});
   const { date } = updatedExercise;
-  const yearMonth: MonthString = dayjs(date).format('YYYY-DD');
+  const yearMonth: MonthString = dayjs(date).format('YYYY-MM');
   exerciseTable = {
     ...exerciseTable,
     [yearMonth]: {
       ...exerciseTable[yearMonth],
-      [date]: exerciseTable[yearMonth][date].map(
-        (exercise: ExerciseEntity): ExerciseEntity => {
+      [date]:
+        (exerciseTable[yearMonth] ?? {})[date] ??
+        [].map((exercise: ExerciseEntity): ExerciseEntity => {
           return exercise.id === id ? exercise : updatedExercise!;
-        },
-      ),
+        }),
     },
   };
   saveToLocalStorage('exercises', exerciseTable);
@@ -77,16 +80,16 @@ const deleteExercise = async (id: string): Promise<void> => {
 
   let exerciseTable = getFromLocalStorage<ExerciseTable>('exercises', {});
   const { date } = deletedExercise;
-  const yearMonth: MonthString = dayjs(date).format('YYYY-DD');
+  const yearMonth: MonthString = dayjs(date).format('YYYY-MM');
   exerciseTable = {
     ...exerciseTable,
     [yearMonth]: {
       ...exerciseTable[yearMonth],
-      [date]: exerciseTable[yearMonth][date].filter(
-        (exercise: ExerciseEntity): boolean => {
+      [date]:
+        (exerciseTable[yearMonth] ?? {})[date] ??
+        [].filter((exercise: ExerciseEntity): boolean => {
           return exercise.id !== deletedExercise!.id;
-        },
-      ),
+        }),
     },
   };
   saveToLocalStorage('exercises', exerciseTable);
@@ -147,8 +150,7 @@ const getUserExercisesByDate = async (
 ): Promise<ExerciseEntity[]> => {
   const exerciseTable = getFromLocalStorage<ExerciseTable>('exercises', {});
   const yearMonth: MonthString = dayjs(date).format('YYYY-MM');
-  const monthRecord = exerciseTable[yearMonth][date] || {};
-  const dayExercises = Object.values(monthRecord);
+  const dayExercises = (exerciseTable[yearMonth] ?? {})[date] ?? [];
   const userExcercises = dayExercises.filter(
     (exercise: ExerciseEntity): boolean => exercise.userId === userId,
   );
