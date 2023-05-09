@@ -1,0 +1,13 @@
+@import 'styles/_globals.scss';
+
+.wrapper {
+  position: relative;
+  width: calc($board-column-width * 3 + 24px * 4);
+  max-width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  overflow-x: auto;
+  padding: 24px;
+  flex-grow: 1;
+}

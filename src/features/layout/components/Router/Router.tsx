@@ -10,9 +10,10 @@ import { Typography } from '@mui/material';
 import dayjs from 'dayjs';
 
 import { Layout } from '..';
-import { CalendarPage, calendarLoader } from 'features/calendar/components';
-import { LoginPage, Logout, SignupPage } from 'features/auth/components';
 import { useAuth } from 'features/auth/hooks';
+import { CalendarPage, calendarLoader } from 'features/calendar/components';
+import { TrackerPage, exerciseLoader } from 'features/tracker/components';
+import { LoginPage, Logout, SignupPage } from 'features/auth/components';
 
 const routes = (authToken?: string): JSX.Element => (
   <Route path="/" element={<Layout />}>
@@ -37,7 +38,11 @@ const routes = (authToken?: string): JSX.Element => (
           <Navigate to={`/tracker/${dayjs(new Date()).format('YYYY-MM-DD')}`} />
         }
       />
-      <Route path=":date" element={<Typography>Tracker page</Typography>} />
+      <Route
+        path=":date"
+        element={<TrackerPage />}
+        loader={exerciseLoader(authToken)}
+      />
     </Route>
     <Route path="auth">
       <Route path="signup" element={<SignupPage />} />

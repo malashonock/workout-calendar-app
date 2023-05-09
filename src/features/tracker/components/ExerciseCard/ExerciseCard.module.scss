@@ -1,0 +1,54 @@
+.wrapper {
+  padding: 0.5rem;
+
+  display: grid;
+  column-gap: 0.5rem;
+  grid-template-columns: min-content auto min-content;
+  grid-template-rows: repeat(1fr, 2);
+  grid-template-areas:
+    'marker exerciseType editBtn'
+    '.      effort       deleteBtn';
+}
+
+.marker {
+  grid-area: marker;
+  $marker-size: 0.75rem;
+  width: $marker-size;
+  height: $marker-size;
+  align-self: center;
+  border-radius: 50%;
+  background-color: var(--marker-color);
+}
+
+.exerciseType {
+  grid-area: exerciseType;
+  font-weight: bolder;
+}
+
+.effort {
+  grid-area: effort;
+  font-size: smaller;
+}
+
+.trail {
+  display: flex;
+  flex-direction: column;
+}
+
+.actionButton {
+  padding: 0.25rem;
+}
+
+.editButton {
+  grid-area: editBtn;
+}
+
+.editButton {
+  grid-area: deleteBtn;
+}
+
+.actionButtonIcon {
+  $action-btn-size: 1rem;
+  width: $action-btn-size;
+  height: $action-btn-size;
+}
