@@ -115,18 +115,6 @@ export const ExerciseCard: FunctionComponent<TaskProps> = ({
         open={confirmDeleteDialogOpen}
         onClose={handleConfirmDeleteDialogClose}
       />
-      {/* {callingForm && modalType === 'view' && (
-        <ModalTasks
-          type="view exercis"
-          setCallingForm={setCallingForm}
-          taskId={taskId}
-          boardId={boardId}
-          columnId={columnId}
-          titleEdit={title}
-          descriptionEdit={description}
-          users={users}
-        />
-      )} */}
     </>
   );
 };
