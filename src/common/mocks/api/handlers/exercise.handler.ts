@@ -260,7 +260,7 @@ const getUserDayExercisesHandler: RestHandler = rest.get<
   null,
   PathParams<string>,
   ExerciseDto[] | string
->(`${apiBaseUrl}/exercises/:date`, async (req, res, ctx) => {
+>(`${apiBaseUrl}/tracker/:date`, async (req, res, ctx) => {
   try {
     if (!isAuthenticated(req)) {
       return res(ctx.status(401), ctx.text('User is not authenticated'));

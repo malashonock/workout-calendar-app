@@ -52,7 +52,7 @@ const getUserDayExercises = async (
   token: string,
 ): Promise<ExerciseDto[]> => {
   const exercises = await FetchService.runQuery<ExerciseDto[]>(
-    `/exercises/${date}`,
+    `/tracker/${date}`,
     token,
   );
   return exercises;
