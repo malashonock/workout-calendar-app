@@ -3,3 +3,4 @@ export * from './BoardColumn';
 export * from './TrackerPage';
 export * from './ExerciseFormDialog';
 export * from './AddExerciseDialog';
+export * from './EditExerciseDialog';

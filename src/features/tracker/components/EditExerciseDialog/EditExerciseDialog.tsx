@@ -10,13 +10,14 @@ import { useAuth } from 'features/auth/hooks';
 import { useExerciseTypes } from '../../hooks';
 import { DialogProps, ExerciseStatus } from 'common/types';
 import { ExerciseService } from 'common/services';
+import { ExerciseDto } from 'common/model/dto';
 
-interface AddExerciseDialogProps extends DialogProps {
-  status: ExerciseStatus;
+interface EditExerciseDialogProps extends DialogProps {
+  exercise: ExerciseDto;
 }
 
-export const AddExerciseDialog: FunctionComponent<AddExerciseDialogProps> = ({
-  status,
+export const EditExerciseDialog: FunctionComponent<EditExerciseDialogProps> = ({
+  exercise,
   open,
   onClose,
 }) => {
@@ -28,15 +29,15 @@ export const AddExerciseDialog: FunctionComponent<AddExerciseDialogProps> = ({
     <ExerciseFormDialog
       open={open}
       onClose={onClose}
-      title="Add exercise"
+      title="Edit exercise"
       initialValues={{
-        exerciseTypeId: exerciseTypes[0]?.id || '',
-        effort: '',
-        setsCount: exerciseTypes[0]?.withSets ? '' : undefined,
+        exerciseTypeId: exercise.exerciseType.id,
+        effort: exercise.effort,
+        setsCount: exercise.setsCount,
       }}
       submit={{
         text: 'Save',
-        callback: async (newExerciseData: ExerciseFormValues) => {
+        callback: async (updatedExerciseData: ExerciseFormValues) => {
           try {
             if (!token) {
               throw new Error('User not authenticated');
@@ -46,7 +47,7 @@ export const AddExerciseDialog: FunctionComponent<AddExerciseDialogProps> = ({
               throw new Error('Date not specified');
             }
 
-            const { exerciseTypeId, effort, setsCount } = newExerciseData;
+            const { exerciseTypeId, effort, setsCount } = updatedExerciseData;
 
             if (effort === '') {
               throw new Error('Effort not specified');
@@ -56,11 +57,10 @@ export const AddExerciseDialog: FunctionComponent<AddExerciseDialogProps> = ({
               throw new Error('Sets count not specified');
             }
 
-            await ExerciseService.createExercise(
+            await ExerciseService.updateExercise(
+              exercise.id,
               {
-                date,
                 exerciseTypeId,
-                status,
                 effort,
                 setsCount: findExerciseTypeById(exerciseTypes, exerciseTypeId)
                   ?.withSets

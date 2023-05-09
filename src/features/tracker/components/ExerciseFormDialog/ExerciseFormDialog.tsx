@@ -34,18 +34,6 @@ interface ExerciseFormDialogProps extends DialogProps {
   };
 }
 
-const exerciseTypeValidation = yup
-  .string()
-  .required('Exercise type is required');
-const effortValidation = yup
-  .number()
-  .positive()
-  .required('Effort estimate is required');
-const setsCountValidation = yup
-  .number()
-  .positive()
-  .required('Sets count is required');
-
 export const findExerciseTypeById = (
   exerciseTypes: ExerciseTypeDto[],
   id: string,
@@ -64,15 +52,18 @@ export const ExerciseFormDialog = ({
 }: ExerciseFormDialogProps): JSX.Element => {
   const revalidator = useRevalidator();
 
-  const validationSchema = yup.object(
-    Object.assign(
-      {
-        exerciseTypeId: exerciseTypeValidation,
-        effort: effortValidation,
-      },
-      initialValues.setsCount !== undefined ? setsCountValidation : {},
-    ),
-  );
+  const validationSchema = yup.object({
+    exerciseTypeId: yup.string().required('Exercise type is required'),
+    effort: yup.number().positive().required('Effort estimate is required'),
+    setsCount: yup
+      .number()
+      .positive()
+      .when('exerciseTypeId', ([id], schema) => {
+        return findExerciseTypeById(exerciseTypes, id)?.withSets
+          ? schema.required('Sets count is required')
+          : schema.notRequired();
+      }),
+  });
 
   const exerciseTypes = useExerciseTypes();
 

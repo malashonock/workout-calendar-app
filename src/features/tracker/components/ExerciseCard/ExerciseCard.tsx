@@ -6,6 +6,7 @@ import cn from 'classnames';
 import styles from './ExerciseCard.module.scss';
 import { Delete, Edit } from '@mui/icons-material';
 import { ExerciseDto } from 'common/model/dto';
+import { EditExerciseDialog } from '../EditExerciseDialog';
 
 interface TaskProps {
   exercise: ExerciseDto;
@@ -18,23 +19,17 @@ export const ExerciseCard: FunctionComponent<TaskProps> = ({
 }: TaskProps): JSX.Element => {
   const { id, exerciseType, effort, setsCount } = exercise;
 
-  const [callingForm, setCallingForm] = useState(false);
-  const [modalType, setModalType] = useState('');
+  const [editExerciseDialogOpen, setEditExerciseDialogOpen] = useState(false);
 
-  const handleEdit = (e: MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    setCallingForm(true);
-    setModalType('edit');
+  const handleEditExerciseDialogClose = (): void => {
+    setEditExerciseDialogOpen(false);
   };
 
-  const handleView = () => {
-    setCallingForm(true);
-    setModalType('view');
+  const handleOpenEditExerciseDialog = (): void => {
+    setEditExerciseDialogOpen(true);
   };
 
-  const handleDelete = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-  };
+  const handleDelete = (): void => {};
 
   return (
     <>
@@ -42,7 +37,6 @@ export const ExerciseCard: FunctionComponent<TaskProps> = ({
         {({ draggableProps, dragHandleProps, innerRef }: DraggableProvided) => (
           <Card
             className={styles.wrapper}
-            onClick={handleView}
             {...draggableProps}
             {...dragHandleProps}
             ref={innerRef}
@@ -62,7 +56,7 @@ export const ExerciseCard: FunctionComponent<TaskProps> = ({
               className={cn(styles.actionButton, styles.editButton)}
               color="warning"
               size="small"
-              onClick={handleEdit}
+              onClick={handleOpenEditExerciseDialog}
               title="Edit exercise"
             >
               <Edit className={styles.actionButtonIcon} />
@@ -79,18 +73,11 @@ export const ExerciseCard: FunctionComponent<TaskProps> = ({
           </Card>
         )}
       </Draggable>
-      {/* {callingForm && modalType === 'edit' && (
-        <ModalTasks
-          type="edit exercis"
-          setCallingForm={setCallingForm}
-          taskId={taskId}
-          boardId={boardId}
-          columnId={columnId}
-          titleEdit={title}
-          descriptionEdit={description}
-          users={users}
-        />
-      )} */}
+      <EditExerciseDialog
+        exercise={exercise}
+        open={editExerciseDialogOpen}
+        onClose={handleEditExerciseDialogClose}
+      />
       {/* {callingForm && modalType === 'view' && (
         <ModalTasks
           type="view exercis"
