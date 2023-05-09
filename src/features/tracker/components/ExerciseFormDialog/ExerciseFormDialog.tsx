@@ -11,6 +11,7 @@ import {
 import { Formik, Form, Field } from 'formik';
 import { Select, TextField } from 'formik-mui';
 import * as yup from 'yup';
+import { useRevalidator } from 'react-router-dom';
 
 import { ExerciseTypeDto } from 'common/model/dto';
 import { DialogProps } from 'common/types';
@@ -61,6 +62,8 @@ export const ExerciseFormDialog = ({
   initialValues,
   submit,
 }: ExerciseFormDialogProps): JSX.Element => {
+  const revalidator = useRevalidator();
+
   const validationSchema = yup.object(
     Object.assign(
       {
@@ -80,6 +83,7 @@ export const ExerciseFormDialog = ({
       onSubmit={async (values: ExerciseFormValues, { setSubmitting }) => {
         await submit.callback(values);
         setSubmitting(false);
+        revalidator.revalidate(); // trigger refetch in loader
       }}
     >
       {({ submitForm, isSubmitting, values, errors, dirty }) => (
