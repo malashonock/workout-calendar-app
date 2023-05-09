@@ -1,21 +1,36 @@
 import { FunctionComponent } from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, useNavigate, useParams } from 'react-router-dom';
 import {
   DragDropContext,
   DropResult,
   Droppable,
   DroppableProvided,
 } from 'react-beautiful-dnd';
-import { Paper, Stack } from '@mui/material';
+import { Box, IconButton, Paper, Stack, Typography } from '@mui/material';
+import dayjs from 'dayjs';
 
 import { ExerciseDto } from 'common/model/dto';
 import { BoardColumnConfig, columnsConfig } from './columnsConfig';
 import { BoardColumn } from '../BoardColumn';
 
 import styles from './TrackerPage.module.scss';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 export const TrackerPage: FunctionComponent = () => {
+  const { date } = useParams();
+  const navigate = useNavigate();
   const exercises = useLoaderData() as ExerciseDto[];
+
+  const handleGotoPrevDay = (): void => {
+    const prevDay = dayjs(date).add(-1, 'day').format('YYYY-MM-DD');
+    navigate(`/tracker/${prevDay}`);
+  };
+
+  const handleGotoNextDay = (): void => {
+    const nextDay = dayjs(date).add(+1, 'day').format('YYYY-MM-DD');
+    navigate(`/tracker/${nextDay}`);
+  };
 
   const handleDragEnd = async ({
     source,
@@ -146,17 +161,31 @@ export const TrackerPage: FunctionComponent = () => {
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Paper className={styles.wrapper}>
-        {columnsConfig.map(
-          ({ status, title }: BoardColumnConfig): JSX.Element => (
-            <BoardColumn
-              key={status}
-              title={title}
-              exercises={exercises.filter(
-                (exercise: ExerciseDto): boolean => exercise.status === status,
-              )}
-            />
-          ),
-        )}
+        <Box className={styles.header}>
+          <IconButton onClick={handleGotoPrevDay}>
+            <KeyboardArrowLeftIcon />
+          </IconButton>
+          <Typography className={styles.date}>
+            {dayjs(date).format('ddd, MMMM D, YYYY')}
+          </Typography>
+          <IconButton onClick={handleGotoNextDay}>
+            <KeyboardArrowRightIcon />
+          </IconButton>
+        </Box>
+        <Stack direction="row" className={styles.board}>
+          {columnsConfig.map(
+            ({ status, title }: BoardColumnConfig): JSX.Element => (
+              <BoardColumn
+                key={status}
+                title={title}
+                exercises={exercises.filter(
+                  (exercise: ExerciseDto): boolean =>
+                    exercise.status === status,
+                )}
+              />
+            ),
+          )}
+        </Stack>
       </Paper>
     </DragDropContext>
   );
