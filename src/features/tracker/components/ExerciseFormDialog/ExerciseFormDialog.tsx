@@ -71,10 +71,14 @@ export const ExerciseFormDialog = ({
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={async (values: ExerciseFormValues, { setSubmitting }) => {
+      onSubmit={async (
+        values: ExerciseFormValues,
+        { setSubmitting, resetForm },
+      ) => {
         await submit.callback(values);
         setSubmitting(false);
         revalidator.revalidate(); // trigger refetch in loader
+        resetForm();
       }}
     >
       {({ submitForm, isSubmitting, values, errors, dirty }) => (

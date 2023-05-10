@@ -1,14 +1,15 @@
 import { FunctionComponent, useState } from 'react';
 import { Box, IconButton, Paper, Stack, Typography } from '@mui/material';
-import { Droppable, DroppableProvided } from 'react-beautiful-dnd';
+import { DroppableProvided } from 'react-beautiful-dnd';
 
 import { ExerciseDto } from 'common/model/dto';
 import { ExerciseCard } from '../ExerciseCard';
+import { ExerciseStatus } from 'common/types';
+import { AddExerciseDialog } from '../AddExerciseDialog';
+import { StrictModeDroppable } from 'common/components';
 
 import styles from './BoardColumn.module.scss';
 import AddIcon from '@mui/icons-material/Add';
-import { ExerciseStatus } from 'common/types';
-import { AddExerciseDialog } from '../AddExerciseDialog';
 
 interface BoardColumnProps {
   title: string;
@@ -33,14 +34,13 @@ export const BoardColumn: FunctionComponent<BoardColumnProps> = ({
 
   return (
     <>
-      <Droppable droppableId={'1'} direction="vertical" type="task">
+      <StrictModeDroppable
+        droppableId={status}
+        direction="vertical"
+        type="exercise"
+      >
         {({ droppableProps, innerRef, placeholder }: DroppableProvided) => (
-          <Paper
-            className={styles.wrapper}
-            elevation={0}
-            {...droppableProps}
-            ref={innerRef}
-          >
+          <Paper className={styles.wrapper} elevation={0}>
             <Box className={styles.header}>
               <Typography className={styles.title}>{title}</Typography>
               <IconButton
@@ -53,7 +53,7 @@ export const BoardColumn: FunctionComponent<BoardColumnProps> = ({
                 <AddIcon />
               </IconButton>
             </Box>
-            <Stack className={styles.items}>
+            <Stack className={styles.items} {...droppableProps} ref={innerRef}>
               {exercises.map(
                 (exercise: ExerciseDto, index: number): JSX.Element => (
                   <ExerciseCard
@@ -63,11 +63,11 @@ export const BoardColumn: FunctionComponent<BoardColumnProps> = ({
                   />
                 ),
               )}
+              {placeholder}
             </Stack>
-            {placeholder}
           </Paper>
         )}
-      </Droppable>
+      </StrictModeDroppable>
       <AddExerciseDialog
         status={status}
         open={addExerciseDialogOpen}
