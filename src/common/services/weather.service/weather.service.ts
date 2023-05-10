@@ -29,13 +29,10 @@ const getCurrentWeatherForecast =
     return await handleResponse<WeatherForecastResponse>(response);
   };
 
-const checkWeather = async (
+const checkWeather = (
   date: Date,
-  dataSource?: WeatherForecastResponse,
-): Promise<WeatherForecastDto | null> => {
-  const currentWeatherForecast =
-    dataSource ?? (await getCurrentWeatherForecast());
-
+  currentWeatherForecast: WeatherForecastResponse,
+): WeatherForecastDto | null => {
   const selectedDateForecasts: WeatherForecast[] =
     currentWeatherForecast.list.filter((forecast: WeatherForecast): boolean => {
       const forecastDate = new Date(forecast.dt * 1000);
@@ -50,7 +47,7 @@ const checkWeather = async (
   }
 
   const MIN_TEMPERATURE = 10; // deg Celcius
-  const temperatureLow = selectedDateForecasts.some(
+  const lowTemperature = selectedDateForecasts.some(
     (forecast: WeatherForecast): boolean => {
       return forecast.main.temp < MIN_TEMPERATURE;
     },
@@ -61,17 +58,11 @@ const checkWeather = async (
       return Boolean(forecast.rain);
     },
   );
-  const snowExpected = selectedDateForecasts.some(
-    (forecast: WeatherForecast): boolean => {
-      return Boolean(forecast.snow);
-    },
-  );
-  const precipitationLikely = rainExpected || snowExpected;
 
   return {
     date,
-    temperatureLow,
-    precipitationLikely,
+    lowTemperature,
+    rainExpected,
   };
 };
 

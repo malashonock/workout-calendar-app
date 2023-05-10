@@ -11,11 +11,13 @@ import {
 import { Formik, Form, Field } from 'formik';
 import { Select, TextField } from 'formik-mui';
 import * as yup from 'yup';
-import { useRevalidator } from 'react-router-dom';
+import { useParams, useRevalidator } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 import { ExerciseTypeDto } from 'common/model/dto';
 import { DialogProps } from 'common/types';
 import { useExerciseTypes } from 'features/tracker/hooks';
+import { WeatherValidator } from '../';
 
 import styles from './ExerciseFormDialog.module.scss';
 
@@ -50,6 +52,7 @@ export const ExerciseFormDialog = ({
   initialValues,
   submit,
 }: ExerciseFormDialogProps): JSX.Element => {
+  const { date } = useParams();
   const revalidator = useRevalidator();
 
   const validationSchema = yup.object({
@@ -116,6 +119,12 @@ export const ExerciseFormDialog = ({
                           )}
                         </Field>
                       </Grid>
+                      {findExerciseTypeById(
+                        exerciseTypes,
+                        values.exerciseTypeId,
+                      )?.isOutdoor ? (
+                        <WeatherValidator date={dayjs(date).toDate()} />
+                      ) : null}
                       <Grid item xs={12}>
                         <Field
                           component={TextField}

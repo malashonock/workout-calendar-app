@@ -6,3 +6,4 @@ export * from './EditExerciseDialog';
 export * from './ConfirmDeleteExerciseDialog';
 export * from './ExerciseTypesProvider';
 export * from './WeatherForecastProvider';
+export * from './WeatherValidator';
