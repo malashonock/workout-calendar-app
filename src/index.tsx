@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
 
 import { App } from 'features/layout/components';
 import reportWebVitals from './reportWebVitals';
+import { ExerciseTypeRepository } from 'common/mocks/repo';
+import { store } from 'common/store';
 
 import 'styles/index.scss';
 import '@fontsource/roboto/300.css';
@@ -10,7 +13,6 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import '@fontsource/permanent-marker';
-import { ExerciseTypeRepository } from 'common/mocks/repo';
 
 // Launch mock API if in development
 if (process.env.NODE_ENV === 'development') {
@@ -28,7 +30,9 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
 );
 

@@ -6,11 +6,12 @@ import {
   ExerciseFormValues,
   findExerciseTypeById,
 } from '..';
-import { useAuth } from 'features/auth/hooks';
 import { useExerciseTypes } from '../../hooks';
-import { DialogProps, ExerciseStatus } from 'common/types';
+import { DialogProps } from 'common/types';
 import { ExerciseService } from 'common/services';
 import { ExerciseDto } from 'common/model/dto';
+import { useSelector } from 'react-redux';
+import { selectAuthToken } from 'common/store';
 
 interface EditExerciseDialogProps extends DialogProps {
   exercise: ExerciseDto;
@@ -21,7 +22,7 @@ export const EditExerciseDialog: FunctionComponent<EditExerciseDialogProps> = ({
   open,
   onClose,
 }) => {
-  const { token } = useAuth();
+  const token = useSelector(selectAuthToken);
   const exerciseTypes = useExerciseTypes();
   const { date } = useParams();
 

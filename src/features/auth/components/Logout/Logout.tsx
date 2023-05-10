@@ -1,23 +1,19 @@
 import { FunctionComponent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
+import { useDispatch } from 'react-redux';
 
-import { useAuth } from 'features/auth/hooks';
-import { AuthActionType } from 'features/auth/types';
 import { AuthService } from 'common/services';
+import { logOut } from 'common/store';
 
 export const Logout: FunctionComponent = () => {
-  const { dispatch } = useAuth();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
       await AuthService.logout();
-
-      dispatch({
-        type: AuthActionType.Logout,
-      });
-
+      dispatch(logOut());
       navigate('/');
     })();
   }, [dispatch, navigate]);

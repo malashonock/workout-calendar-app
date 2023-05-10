@@ -1,8 +1,9 @@
 import { FunctionComponent } from 'react';
+import { useSelector } from 'react-redux';
 import { IconButton, Avatar } from '@mui/material';
 
-import { useAuth } from 'features/auth/hooks';
 import { getInitials } from 'common/utils';
+import { selectLoggedUser } from 'common/store';
 
 interface UserAccountButtonProps {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -11,7 +12,7 @@ interface UserAccountButtonProps {
 export const UserAccountButton: FunctionComponent<UserAccountButtonProps> = ({
   onClick,
 }) => {
-  const { loggedUser } = useAuth();
+  const loggedUser = useSelector(selectLoggedUser);
 
   const initials: string | null = loggedUser
     ? getInitials(loggedUser.name)

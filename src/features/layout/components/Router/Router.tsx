@@ -6,14 +6,15 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Typography } from '@mui/material';
 import dayjs from 'dayjs';
 
 import { Layout } from '..';
-import { useAuth } from 'features/auth/hooks';
 import { CalendarPage, calendarLoader } from 'features/calendar/components';
 import { TrackerPage, exerciseLoader } from 'features/tracker/components';
 import { LoginPage, Logout, SignupPage } from 'features/auth/components';
+import { selectAuthToken } from 'common/store';
 
 const routes = (authToken?: string): JSX.Element => (
   <Route path="/" element={<Layout />}>
@@ -63,7 +64,7 @@ const router = (authToken?: string) =>
   createBrowserRouter(createRoutesFromElements(routes(authToken)));
 
 export const Router: FunctionComponent = () => {
-  const { token } = useAuth();
+  const token = useSelector(selectAuthToken);
 
   return <RouterProvider router={router(token)} />;
 };

@@ -1,12 +1,13 @@
 import { FunctionComponent, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Menu } from '@mui/material';
 
 import { UserMenuItemConfig, userMenuConfig } from './userMenuConfig';
 import { UserAccountButton, UserMenuItem } from '..';
-import { useAuth } from 'features/auth/hooks';
+import { selectAuthToken } from 'common/store';
 
 export const UserMenu: FunctionComponent = () => {
-  const { token } = useAuth();
+  const token = useSelector(selectAuthToken);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 

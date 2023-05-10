@@ -5,23 +5,24 @@ import {
   useParams,
   useRevalidator,
 } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { Box, IconButton, Paper, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 
 import { ExerciseDto } from 'common/model/dto';
-import { BoardColumnConfig, columnsConfig } from './columnsConfig';
+import { columnsConfig } from './columnsConfig';
 import { BoardColumnTree, buildColumnTrees } from './buildColumnTrees';
 import { BoardColumn } from '../BoardColumn';
 import { ExerciseService } from 'common/services';
-import { useAuth } from 'features/auth/hooks';
+import { selectAuthToken } from 'common/store';
 
 import styles from './TrackerPage.module.scss';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 export const TrackerPage: FunctionComponent = () => {
-  const { token } = useAuth();
+  const token = useSelector(selectAuthToken);
   const { date } = useParams();
   const revalidator = useRevalidator();
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ export const TrackerPage: FunctionComponent = () => {
   const [columnTrees, setColumnTrees] = useState<BoardColumnTree[]>([]);
   useEffect(() => {
     setColumnTrees(buildColumnTrees(columnsConfig, exercises));
-  }, [columnsConfig, exercises]);
+  }, [exercises]);
 
   const handleGotoPrevDay = (): void => {
     const prevDay = dayjs(date).add(-1, 'day').format('YYYY-MM-DD');

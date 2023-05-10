@@ -1,5 +1,6 @@
 import { CSSProperties, FunctionComponent, useState } from 'react';
 import { useRevalidator } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Card, IconButton, Typography } from '@mui/material';
 import { Draggable, DraggableProvided } from 'react-beautiful-dnd';
 import cn from 'classnames';
@@ -7,7 +8,7 @@ import cn from 'classnames';
 import { ExerciseDto } from 'common/model/dto';
 import { EditExerciseDialog, ConfirmDeleteExerciseDialog } from '..';
 import { ExerciseService } from 'common/services';
-import { useAuth } from 'features/auth/hooks';
+import { selectAuthToken } from 'common/store';
 
 import styles from './ExerciseCard.module.scss';
 import { Delete, Edit } from '@mui/icons-material';
@@ -21,7 +22,7 @@ export const ExerciseCard: FunctionComponent<TaskProps> = ({
   exercise,
   index,
 }: TaskProps): JSX.Element => {
-  const { token } = useAuth();
+  const token = useSelector(selectAuthToken);
   const revalidator = useRevalidator();
 
   const { id, exerciseType, effort, setsCount } = exercise;

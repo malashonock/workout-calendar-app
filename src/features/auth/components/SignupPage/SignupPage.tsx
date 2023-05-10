@@ -1,17 +1,18 @@
 import { FunctionComponent } from 'react';
-import { UserForm } from '..';
 import { useNavigate } from 'react-router-dom';
-
-import styles from './SignupPage.module.scss';
+import { useDispatch } from 'react-redux';
 import { Paper } from '@mui/material';
+
+import { UserForm } from '..';
 import { UserFields } from 'common/model/form-fields';
 import { AuthService, UserService } from 'common/services';
-import { useAuth } from 'features/auth/hooks';
-import { AuthActionType } from 'features/auth/types';
+import { logIn } from 'common/store';
+
+import styles from './SignupPage.module.scss';
 
 export const SignupPage: FunctionComponent = () => {
   const navigate = useNavigate();
-  const { dispatch } = useAuth();
+  const dispatch = useDispatch();
 
   return (
     <Paper className={styles.wrapper}>
@@ -31,13 +32,12 @@ export const SignupPage: FunctionComponent = () => {
               newUserData.password,
             );
 
-            dispatch({
-              type: AuthActionType.Login,
-              payload: {
+            dispatch(
+              logIn({
                 loggedUser: createdUser,
                 token,
-              },
-            });
+              }),
+            );
 
             navigate('/');
           },

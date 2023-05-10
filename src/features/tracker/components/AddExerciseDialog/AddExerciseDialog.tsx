@@ -1,15 +1,16 @@
 import { FunctionComponent } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import {
   ExerciseFormDialog,
   ExerciseFormValues,
   findExerciseTypeById,
 } from '..';
-import { useAuth } from 'features/auth/hooks';
 import { useExerciseTypes } from '../../hooks';
 import { DialogProps, ExerciseStatus } from 'common/types';
 import { ExerciseService } from 'common/services';
+import { selectAuthToken } from 'common/store';
 
 interface AddExerciseDialogProps extends DialogProps {
   status: ExerciseStatus;
@@ -20,7 +21,7 @@ export const AddExerciseDialog: FunctionComponent<AddExerciseDialogProps> = ({
   open,
   onClose,
 }) => {
-  const { token } = useAuth();
+  const token = useSelector(selectAuthToken);
   const exerciseTypes = useExerciseTypes();
   const { date } = useParams();
 
