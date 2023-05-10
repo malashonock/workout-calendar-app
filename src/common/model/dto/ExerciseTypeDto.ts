@@ -4,4 +4,5 @@ export interface ExerciseTypeDto {
   color: string;
   unitOfEffort: string;
   withSets: boolean;
+  isOutdoor: boolean;
 }

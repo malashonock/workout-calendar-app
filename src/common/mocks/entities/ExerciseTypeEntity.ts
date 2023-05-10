@@ -4,4 +4,5 @@ export interface ExerciseTypeEntity {
   color: string;
   unitOfEffort: string;
   withSets: boolean;
+  isOutdoor: boolean;
 }

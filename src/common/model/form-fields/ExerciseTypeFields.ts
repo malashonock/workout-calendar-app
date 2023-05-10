@@ -3,4 +3,5 @@ export interface ExerciseTypeFields {
   color: string;
   unitOfEffort: string;
   withSets: boolean;
+  isOutdoor: boolean;
 }

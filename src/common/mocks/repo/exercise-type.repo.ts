@@ -38,6 +38,7 @@ const seedTypes = async (): Promise<void> => {
       color: '#4caf50', // MUI green[500]
       unitOfEffort: 'km',
       withSets: false,
+      isOutdoor: true,
     },
     {
       id: '2',
@@ -45,6 +46,7 @@ const seedTypes = async (): Promise<void> => {
       color: '#ff5722', // MUI deepOrange[500]
       unitOfEffort: 'reps',
       withSets: true,
+      isOutdoor: false,
     },
     {
       id: '3',
@@ -52,6 +54,7 @@ const seedTypes = async (): Promise<void> => {
       color: '#e91e63', // MUI pink[500]
       unitOfEffort: 'reps',
       withSets: true,
+      isOutdoor: false,
     },
     {
       id: '4',
@@ -59,6 +62,7 @@ const seedTypes = async (): Promise<void> => {
       color: '#673ab7', // MUI deepPurple[500]
       unitOfEffort: 'reps',
       withSets: true,
+      isOutdoor: false,
     },
     {
       id: '5',
@@ -66,6 +70,7 @@ const seedTypes = async (): Promise<void> => {
       color: '#03a9f4', // MUI lightBlue[500]
       unitOfEffort: 'min',
       withSets: true,
+      isOutdoor: false,
     },
   ];
 
