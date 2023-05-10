@@ -22,7 +22,7 @@ Workout-calendar-app - клиентское приложениe на React, ко
 ## Technology stack summary:
 
 1. TypeScript
-2. React
+2. React + CRA
 3. State management: Redux Toolkit
 4. UI kit: MUI
 5. Forms: Formik + yup
