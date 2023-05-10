@@ -11,9 +11,10 @@ import { Typography } from '@mui/material';
 import dayjs from 'dayjs';
 
 import { Layout } from '..';
-import { CalendarPage, calendarLoader } from 'features/calendar/components';
-import { TrackerPage, exerciseLoader } from 'features/tracker/components';
-import { LoginPage, Logout, SignupPage } from 'features/auth/components';
+import { CalendarPage, calendarLoader } from 'features/calendar/pages';
+import { TrackerPage, exerciseLoader } from 'features/tracker/pages';
+import { LoginPage, SignupPage } from 'features/auth/pages';
+import { Logout } from 'features/auth/components';
 import { selectAuthToken } from 'common/store';
 
 const routes = (authToken?: string): JSX.Element => (

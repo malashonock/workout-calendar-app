@@ -3,38 +3,38 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Paper } from '@mui/material';
 
-import { UserForm } from '..';
-import { UserFields } from 'common/model/form-fields';
+import { LoginFields } from 'common/model/form-fields';
+import { UserForm } from '../../components';
 import { AuthService, UserService } from 'common/services';
 import { logIn } from 'common/store';
 
-import styles from './SignupPage.module.scss';
+import styles from './LoginPage.module.scss';
 
-export const SignupPage: FunctionComponent = () => {
+export const LoginPage: FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   return (
     <Paper className={styles.wrapper}>
-      <UserForm
-        title="Sign up"
+      <UserForm<LoginFields>
+        title="Log in"
         initialValues={{
-          name: '',
           email: '',
           password: '',
         }}
         submit={{
-          text: 'Sign Up',
-          callback: async (newUserData: UserFields) => {
-            const createdUser = await UserService.registerUser(newUserData);
-            const { token } = await AuthService.login(
-              newUserData.email,
-              newUserData.password,
+          text: 'Log In',
+          callback: async (credentials: LoginFields) => {
+            const { userId, token } = await AuthService.login(
+              credentials.email,
+              credentials.password,
             );
+
+            const loggedUser = await UserService.getUser(userId, token);
 
             dispatch(
               logIn({
-                loggedUser: createdUser,
+                loggedUser,
                 token,
               }),
             );
@@ -43,8 +43,8 @@ export const SignupPage: FunctionComponent = () => {
           },
         }}
         auxLink={{
-          text: 'Already have an account? Log in',
-          redirectTo: '/auth/login',
+          text: "Don't have an account? Sign up",
+          redirectTo: '/auth/signup',
         }}
       />
     </Paper>

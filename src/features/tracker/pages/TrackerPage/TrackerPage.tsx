@@ -13,7 +13,7 @@ import dayjs from 'dayjs';
 import { ExerciseDto } from 'common/model/dto';
 import { columnsConfig } from './columnsConfig';
 import { BoardColumnTree, buildColumnTrees } from './buildColumnTrees';
-import { BoardColumn } from '../BoardColumn';
+import { BoardColumn } from '../../components';
 import { ExerciseService } from 'common/services';
 import { selectAuthToken } from 'common/store';
 

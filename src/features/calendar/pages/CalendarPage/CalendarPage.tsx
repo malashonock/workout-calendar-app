@@ -5,7 +5,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-import { CalendarDay } from '..';
+import { CalendarDay } from '../../components';
 import { CalendarStatsDto } from 'common/model/dto';
 
 import styles from './CalendarPage.module.scss';
