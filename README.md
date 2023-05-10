@@ -17,10 +17,12 @@ Sport-calendar-app - клиентское приложениe на React, кот
 Время выполнения тестового задания не более 2-х дней.
 
 ## Technology stack summary:
-1. React
-2. State management - useContext hook
-3. UI kit - MUI
-4. Forms - Formik + yup
-5. Mock API server - msw + localStorage
-6. Drag-and-drop - react-beautiful-dnd
+1. TypeScript
+2. React
+3. State management: useContext hook
+4. UI kit: MUI
+5. Forms: Formik + yup
+6. Mock API server: msw + localStorage
+7. Drag-and-drop: react-beautiful-dnd
+8. CS routing: react-router + loaders API
 
