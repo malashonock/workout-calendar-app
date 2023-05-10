@@ -32,8 +32,12 @@ const getCurrentWeatherForecast =
     return await handleResponse<WeatherForecastResponse>(response);
   };
 
-const checkWeather = async (date: Date): Promise<WeatherForecastDto | null> => {
-  const currentWeatherForecast = await getCurrentWeatherForecast();
+const checkWeather = async (
+  date: Date,
+  dataSource?: WeatherForecastResponse,
+): Promise<WeatherForecastDto | null> => {
+  const currentWeatherForecast =
+    dataSource ?? (await getCurrentWeatherForecast());
 
   const selectedDateForecasts: WeatherForecast[] =
     currentWeatherForecast.list.filter((forecast: WeatherForecast): boolean => {
@@ -75,5 +79,6 @@ const checkWeather = async (date: Date): Promise<WeatherForecastDto | null> => {
 };
 
 export const WeatherService = {
+  getCurrentWeatherForecast,
   checkWeather,
 };
