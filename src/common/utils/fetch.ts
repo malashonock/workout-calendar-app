@@ -6,7 +6,7 @@ export enum MutationMethod {
   DELETE = 'DELETE',
 }
 
-const handleResponse = async <TResBody>(
+export const handleResponse = async <TResBody>(
   response: Response,
 ): Promise<TResBody> => {
   if (response.status >= 300) {
