@@ -23,10 +23,7 @@ const getCurrentWeatherForecast =
 
     const response = await fetch(`${apiBaseUrl}${endpoint}?${searchParams}`, {
       method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
+      mode: 'cors',
     });
 
     return await handleResponse<WeatherForecastResponse>(response);
