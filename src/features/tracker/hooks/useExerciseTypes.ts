@@ -1,17 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useContext } from 'react';
 
 import { ExerciseTypeDto } from 'common/model/dto';
-import { ExerciseTypeService } from 'common/services';
+import { ExerciseTypesContext } from '../components';
 
 export const useExerciseTypes = (): ExerciseTypeDto[] => {
-  const [exerciseTypes, setExerciseTypes] = useState<ExerciseTypeDto[]>([]);
-
-  useEffect(() => {
-    (async () => {
-      const types = await ExerciseTypeService.getExerciseTypes();
-      setExerciseTypes(types);
-    })();
-  }, []);
-
+  const exerciseTypes = useContext(ExerciseTypesContext);
   return exerciseTypes;
 };

@@ -16,6 +16,7 @@ import { TrackerPage, exerciseLoader } from 'features/tracker/pages';
 import { LoginPage, SignupPage } from 'features/auth/pages';
 import { Logout } from 'features/auth/components';
 import { selectAuthToken } from 'common/store';
+import { ExerciseTypesProvider } from 'features/tracker/components';
 
 const routes = (authToken?: string): JSX.Element => (
   <Route path="/" element={<Layout />}>
@@ -33,18 +34,22 @@ const routes = (authToken?: string): JSX.Element => (
         loader={calendarLoader(authToken)}
       />
     </Route>
-    <Route path="tracker">
-      <Route
-        index
-        element={
-          <Navigate to={`/tracker/${dayjs(new Date()).format('YYYY-MM-DD')}`} />
-        }
-      />
-      <Route
-        path=":date"
-        element={<TrackerPage />}
-        loader={exerciseLoader(authToken)}
-      />
+    <Route element={<ExerciseTypesProvider />}>
+      <Route path="tracker">
+        <Route
+          index
+          element={
+            <Navigate
+              to={`/tracker/${dayjs(new Date()).format('YYYY-MM-DD')}`}
+            />
+          }
+        />
+        <Route
+          path=":date"
+          element={<TrackerPage />}
+          loader={exerciseLoader(authToken)}
+        />
+      </Route>
     </Route>
     <Route path="auth">
       <Route path="signup" element={<SignupPage />} />

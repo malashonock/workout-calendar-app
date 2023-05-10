@@ -4,3 +4,4 @@ export * from './ExerciseFormDialog';
 export * from './AddExerciseDialog';
 export * from './EditExerciseDialog';
 export * from './ConfirmDeleteExerciseDialog';
+export * from './ExerciseTypesProvider';
