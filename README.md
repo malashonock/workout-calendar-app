@@ -1,46 +1,26 @@
-# Getting Started with Create React App
+## Тестовое задание
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Задача: 
+Sport-calendar-app - клиентское приложениe на React, которое включает в себя следующий функционал:
+- Авторизация, аутентификация и регистрация (имитация с сохранением прогресса в localstorage) _Реализовано_
+- Возможность создавать календарь тренировок, с отслеживанием текущего дня _Реализовано_
+- При создании тренировки должна быть возможность выбрать упражнения из списка (5 базовых активностей со своими индикаторами прогресса (км, мин., раз/за подход)) _Реализовано_
+- При добавлении активности "бег" нужно реализовать предупреждение о плохой погоде. Проверять погоду на этот день (https://openweathermap.org/api) с предупреждением если будет дождь или температура ниже 10 градусов. _Пока не реализовано_
+- При нажатии на день в календаре нужно видеть дашборд по принципу Jira (todo/in progress/done), где можно работать по принципу drag and drop. При переносе в done вся тренировка помечается как done. _В принципе готово - в планах еще реализовать DnD в части сортировки внутри колонок_
+- В личном кабинете должна быть возможность просмотра статистики (done/failed) тренировок и информации указано при регистрации. Визуальное оформление на ваше усмотрение _Пока не реализовано_
 
-## Available Scripts
+При оценивании выполненного тестового задания будут учитываться следующие пункты:
+1. Скорость и стабильность работы приложения
+2. Архитектура проекта, возможность его расширения
+3. Дизайн
+4. Знания и понимание использованных технологий, уместность их применения в данном решении (обсуждается после)
+Время выполнения тестового задания не более 2-х дней.
 
-In the project directory, you can run:
+Technology stack summary:
+1. React
+2. State management - useContext hook
+3. UI kit - MUI
+4. Forms - Formik + yup
+5. Mock API server - msw + localStorage
+6. Drag-and-drop - react-beautiful-dnd
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
