@@ -1,35 +1,27 @@
 import { FunctionComponent } from 'react';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-import dayjs from 'dayjs';
 
 import { TimeScale } from 'common/types';
 import { PeriodSettings } from '../../types';
 
 import styles from './TimeScaleSelector.module.scss';
 
-interface TimeScaleSelectorProps {
-  state: PeriodSettings;
-  setState: (newState: PeriodSettings) => void;
+interface TimeScaleSelectorProps extends PeriodSettings {
+  onChange: (newScale: TimeScale) => void;
 }
 
 export const TimeScaleSelector: FunctionComponent<TimeScaleSelectorProps> = ({
-  state,
-  setState,
+  timeScale,
+  startDate,
+  onChange,
 }) => {
-  const { timeScale, startDate } = state;
-
   const timeScaleOptions = [TimeScale.Week, TimeScale.Month, TimeScale.Year];
 
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
     newTimeScale: TimeScale,
   ) => {
-    const newStartDate: Date = dayjs(startDate).startOf(newTimeScale).toDate();
-
-    setState({
-      timeScale: newTimeScale,
-      startDate: newStartDate,
-    });
+    onChange(newTimeScale);
   };
 
   return (

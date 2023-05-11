@@ -1,10 +1,11 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Stack } from '@mui/material';
+import { Paper } from '@mui/material';
 import dayjs from 'dayjs';
 import weekDay from 'dayjs/plugin/weekday';
 
 import { TimeScaleSelector } from '../../components';
+import { PeriodSelector } from 'common/components';
 import { TimeScale } from 'common/types';
 import { PeriodSettings } from '../../types';
 import { buildSearchParams, parseSearchParams } from '../../utils';
@@ -23,19 +24,33 @@ export const StatsPage: FunctionComponent = () => {
     },
   );
 
-  // // Sync settings with search params update
-  // useEffect(() => {
-  //   setPeriodSettings(parseSearchParams(searchParams) || { ...periodSettings });
-  // }, [searchParams]);
+  const { timeScale, startDate } = periodSettings;
 
   // Sync search params with settings update
   useEffect(() => {
     setSearchParams(buildSearchParams(periodSettings));
   }, [periodSettings]);
 
+  const handleScaleChange = (newTimeScale: TimeScale): void => {
+    const newStartDate: Date = dayjs(startDate).startOf(newTimeScale).toDate();
+
+    setPeriodSettings({
+      timeScale: newTimeScale,
+      startDate: newStartDate,
+    });
+  };
+
+  const handlePeriodChange = (newStartDate: Date): void => {
+    setPeriodSettings({
+      timeScale,
+      startDate: newStartDate,
+    });
+  };
+
   return (
-    <Stack>
-      <TimeScaleSelector state={periodSettings} setState={setPeriodSettings} />
-    </Stack>
+    <Paper className={styles.wrapper}>
+      <TimeScaleSelector {...periodSettings} onChange={handleScaleChange} />
+      <PeriodSelector {...periodSettings} onChange={handlePeriodChange} />
+    </Paper>
   );
 };

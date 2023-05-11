@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import { Box, IconButton, Paper, Stack, Typography } from '@mui/material';
+import { Paper, Stack } from '@mui/material';
 import dayjs from 'dayjs';
 
 import { ExerciseDto } from 'common/model/dto';
@@ -16,10 +16,10 @@ import { BoardColumnTree, buildColumnTrees } from './buildColumnTrees';
 import { BoardColumn } from '../../components';
 import { ExerciseService } from 'common/services';
 import { selectAuthToken } from 'common/store';
+import { PeriodSelector } from 'common/components';
+import { TimeScale } from 'common/types';
 
 import styles from './TrackerPage.module.scss';
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 export const TrackerPage: FunctionComponent = () => {
   const token = useSelector(selectAuthToken);
@@ -34,14 +34,8 @@ export const TrackerPage: FunctionComponent = () => {
     setColumnTrees(buildColumnTrees(columnsConfig, exercises));
   }, [exercises]);
 
-  const handleGotoPrevDay = (): void => {
-    const prevDay = dayjs(date).add(-1, 'day').format('YYYY-MM-DD');
-    navigate(`/tracker/${prevDay}`);
-  };
-
-  const handleGotoNextDay = (): void => {
-    const nextDay = dayjs(date).add(+1, 'day').format('YYYY-MM-DD');
-    navigate(`/tracker/${nextDay}`);
+  const handleDateChange = (newDate: Date): void => {
+    navigate(`/tracker/${dayjs(newDate).format('YYYY-MM-DD')}`);
   };
 
   const handleDragEnd = async ({
@@ -131,17 +125,11 @@ export const TrackerPage: FunctionComponent = () => {
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Paper className={styles.wrapper}>
-        <Box className={styles.header}>
-          <IconButton onClick={handleGotoPrevDay}>
-            <KeyboardArrowLeftIcon />
-          </IconButton>
-          <Typography className={styles.date}>
-            {dayjs(date).format('ddd, MMMM D, YYYY')}
-          </Typography>
-          <IconButton onClick={handleGotoNextDay}>
-            <KeyboardArrowRightIcon />
-          </IconButton>
-        </Box>
+        <PeriodSelector
+          timeScale={TimeScale.Day}
+          startDate={dayjs(date).toDate()}
+          onChange={handleDateChange}
+        />
         <Stack direction="row" className={styles.board}>
           {columnTrees.map(
             ({ status, title, exercises }: BoardColumnTree): JSX.Element => (
