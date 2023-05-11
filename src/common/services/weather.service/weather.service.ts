@@ -35,8 +35,8 @@ const checkWeather = (
 ): WeatherForecastDto | null => {
   const selectedDateForecasts: WeatherForecast[] =
     currentWeatherForecast.list.filter((forecast: WeatherForecast): boolean => {
-      const forecastDate = new Date(forecast.dt * 1000);
-      const matchSelectedDate = dayjs(forecastDate).isSame(date, 'day');
+      const forecastDate = dayjs.unix(forecast.dt);
+      const matchSelectedDate = forecastDate.isSame(date, 'day');
       if (!matchSelectedDate) return false;
       const isDayTime = forecast.sys.pod === PartOfDay.Day;
       return isDayTime ? true : false;
