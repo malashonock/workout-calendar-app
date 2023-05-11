@@ -6,7 +6,7 @@ import {
   ExerciseFormValues,
   findExerciseTypeById,
 } from '..';
-import { useExerciseTypes } from '../../hooks';
+import { useExerciseTypes } from 'common/hooks';
 import { DialogProps } from 'common/types';
 import { ExerciseService } from 'common/services';
 import { ExerciseDto } from 'common/model/dto';

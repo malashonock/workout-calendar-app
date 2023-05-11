@@ -7,7 +7,7 @@ import {
   ExerciseFormValues,
   findExerciseTypeById,
 } from '..';
-import { useExerciseTypes } from '../../hooks';
+import { useExerciseTypes } from 'common/hooks';
 import { DialogProps, ExerciseStatus } from 'common/types';
 import { ExerciseService } from 'common/services';
 import { selectAuthToken } from 'common/store';

@@ -17,10 +17,8 @@ import { StatsPage } from 'features/stats/pages';
 import { LoginPage, SignupPage } from 'features/auth/pages';
 import { Logout } from 'features/auth/components';
 import { selectAuthToken } from 'common/store';
-import {
-  ExerciseTypesProvider,
-  WeatherForecastProvider,
-} from 'features/tracker/components';
+import { WeatherForecastProvider } from 'features/tracker/components';
+import { ExerciseTypesProvider } from 'common/components';
 
 const routes = (authToken?: string): JSX.Element => (
   <Route path="/" element={<Layout />}>
@@ -56,6 +54,7 @@ const routes = (authToken?: string): JSX.Element => (
           />
         </Route>
       </Route>
+      <Route path="stats" element={<StatsPage />} />
     </Route>
     <Route path="auth">
       <Route path="signup" element={<SignupPage />} />
@@ -66,7 +65,6 @@ const routes = (authToken?: string): JSX.Element => (
       <Route path="login" element={<LoginPage />} />
       <Route path="logout" element={<Logout />} />
     </Route>
-    <Route path="stats" element={<StatsPage />} />
     <Route path="404" element={<Typography>Page not found</Typography>} />
     <Route path="*" element={<Navigate to="/404" replace />} />
   </Route>

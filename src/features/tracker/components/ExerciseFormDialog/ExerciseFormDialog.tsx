@@ -16,7 +16,7 @@ import dayjs from 'dayjs';
 
 import { ExerciseTypeDto } from 'common/model/dto';
 import { DialogProps } from 'common/types';
-import { useExerciseTypes } from 'features/tracker/hooks';
+import { useExerciseTypes } from 'common/hooks';
 import { WeatherValidator } from '../';
 
 import styles from './ExerciseFormDialog.module.scss';
