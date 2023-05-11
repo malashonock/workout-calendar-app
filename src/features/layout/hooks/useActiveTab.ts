@@ -11,7 +11,7 @@ export const useActiveTab = (
 
   useEffect(() => {
     const newTabIndex = tabsConfig.findIndex(({ to }: TabConfig): boolean =>
-      pathname.startsWith(to),
+      pathname.startsWith(to.split('?')[0]),
     );
 
     setActiveTabIndex(newTabIndex);
