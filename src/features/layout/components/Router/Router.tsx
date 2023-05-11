@@ -13,6 +13,7 @@ import dayjs from 'dayjs';
 import { Layout } from '..';
 import { CalendarPage, calendarLoader } from 'features/calendar/pages';
 import { TrackerPage, exerciseLoader } from 'features/tracker/pages';
+import { StatsPage } from 'features/stats/pages';
 import { LoginPage, SignupPage } from 'features/auth/pages';
 import { Logout } from 'features/auth/components';
 import { selectAuthToken } from 'common/store';
@@ -65,7 +66,7 @@ const routes = (authToken?: string): JSX.Element => (
       <Route path="login" element={<LoginPage />} />
       <Route path="logout" element={<Logout />} />
     </Route>
-    <Route path="stats" element={<Typography>Stats page</Typography>} />
+    <Route path="stats" element={<StatsPage />} />
     <Route path="404" element={<Typography>Page not found</Typography>} />
     <Route path="*" element={<Navigate to="/404" replace />} />
   </Route>
