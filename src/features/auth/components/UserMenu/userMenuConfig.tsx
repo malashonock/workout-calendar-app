@@ -8,12 +8,12 @@ export interface UserMenuItemConfig {
 }
 
 export const userMenuConfig: UserMenuItemConfig[] = [
-  {
-    label: 'User profile',
-    icon: <AccountCircle fontSize="small" />,
-    href: '/auth/userprofile',
-    isPrivate: true,
-  },
+  // {
+  //   label: 'User profile',
+  //   icon: <AccountCircle fontSize="small" />,
+  //   href: '/auth/userprofile',
+  //   isPrivate: true,
+  // },
   {
     label: 'Log out',
     icon: <Logout fontSize="small" />,
