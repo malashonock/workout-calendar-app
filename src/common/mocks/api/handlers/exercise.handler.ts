@@ -478,8 +478,8 @@ const getUserExerciseStatsHandler: RestHandler = rest.get<
     const exerciseTypes: ExerciseTypeEntity[] =
       await ExerciseTypeRepository.getAllTypes();
 
-    const exerciseStats: ExerciseStatsDto[] = exerciseTypes.map(
-      (exerciseType) => ({
+    const exerciseStats = exerciseTypes
+      .map((exerciseType) => ({
         exerciseType,
         timeScale: timeScale as TimeScale,
         startDate,
@@ -487,10 +487,12 @@ const getUserExerciseStatsHandler: RestHandler = rest.get<
         effortChange: aggregateChange[exerciseType.id],
         breakdownByStatus: aggregateByStatus[exerciseType.id],
         breakdownBySubperiod: aggregateBySubperiod[exerciseType.id],
-      }),
-    ) as ExerciseStatsDto[];
+      }))
+      .filter(
+        (exerciseType) => exerciseType.totalEffort > 0,
+      ) as ExerciseStatsDto[];
 
-    // console.log(exerciseStats);
+    console.log(exerciseStats);
 
     return res(ctx.status(200), ctx.json(exerciseStats));
   } catch (error) {
