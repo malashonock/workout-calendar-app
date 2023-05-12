@@ -1,14 +1,16 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Paper } from '@mui/material';
+import { Box, Grid, Paper, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import weekDay from 'dayjs/plugin/weekday';
 
-import { TimeScaleSelector } from '../../components';
+import { ExerciseStatsCard, TimeScaleSelector } from '../../components';
 import { PeriodSelector } from 'common/components';
 import { TimeScale } from 'common/types';
 import { PeriodSettings } from '../../types';
 import { buildSearchParams, parseSearchParams } from '../../utils';
+import { useExerciseStats } from '../../hooks';
+import { ExerciseStatsDto } from 'common/model/dto';
 
 import styles from './StatsPage.module.scss';
 
@@ -40,6 +42,8 @@ export const StatsPage: FunctionComponent = () => {
     });
   };
 
+  const exerciseStats = useExerciseStats(timeScale, startDate);
+
   const handlePeriodChange = (newStartDate: Date): void => {
     setPeriodSettings({
       timeScale,
@@ -51,6 +55,23 @@ export const StatsPage: FunctionComponent = () => {
     <Paper className={styles.wrapper}>
       <TimeScaleSelector {...periodSettings} onChange={handleScaleChange} />
       <PeriodSelector {...periodSettings} onChange={handlePeriodChange} />
+      {exerciseStats.length > 0 ? (
+        <Box className={styles.cards}>
+          {exerciseStats.map(
+            (exerciseStat: ExerciseStatsDto): JSX.Element | null =>
+              exerciseStat.totalEffort ? (
+                <ExerciseStatsCard
+                  key={exerciseStat.exerciseType.id}
+                  stats={exerciseStat}
+                />
+              ) : null,
+          )}
+        </Box>
+      ) : (
+        <Typography className={styles.placeholder} color="text.secondary">
+          No data to display
+        </Typography>
+      )}
     </Paper>
   );
 };

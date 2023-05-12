@@ -7,3 +7,15 @@
   align-items: center;
   gap: 1rem;
 }
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.placeholder {
+  font-style: italic;
+  text-align: center;
+}
