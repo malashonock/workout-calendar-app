@@ -1,0 +1,40 @@
+.wrapper {
+  padding: 0.75rem;
+  width: 20rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+}
+
+.header,
+.charts {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.charts {
+  justify-content: space-between;
+}
+
+.marker {
+  $marker-size: 0.75rem;
+  width: $marker-size;
+  height: $marker-size;
+  border-radius: 50%;
+  background-color: var(--marker-color);
+}
+
+.exerciseType {
+  font-weight: bolder;
+}
+
+.change {
+  font-size: small;
+}
+
+.placeholder {
+  font-size: small;
+  font-style: italic;
+}
