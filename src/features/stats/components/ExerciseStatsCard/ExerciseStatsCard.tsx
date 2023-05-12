@@ -78,7 +78,11 @@ export const ExerciseStatsCard: FunctionComponent<ExerciseStatsCardProps> = ({
       <Box className={styles.footer}>
         {effortChange !== undefined ? (
           <Typography className={styles.change} color="text.secondary">
-            <Typography color="success.main" display="inline" component="span">
+            <Typography
+              color={effortChange > 0 ? 'success.main' : 'error.main'}
+              display="inline"
+              component="span"
+            >
               {new Intl.NumberFormat('en-US', {
                 signDisplay: 'exceptZero',
                 style: 'percent',
