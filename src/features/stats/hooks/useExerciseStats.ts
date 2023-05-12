@@ -26,7 +26,7 @@ export const useExerciseStats = (
       );
       setExerciseStats(stats);
     })();
-  }, []);
+  }, [timeScale, startDate, token]);
 
   return exerciseStats;
 };
