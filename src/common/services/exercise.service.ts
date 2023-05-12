@@ -1,11 +1,18 @@
+import dayjs from 'dayjs';
+
 import { ExerciseFields } from 'common/model/form-fields';
-import { CalendarStatsDto, ExerciseDto } from 'common/model/dto';
+import {
+  CalendarStatsDto,
+  ExerciseDto,
+  ExerciseStatsDto,
+} from 'common/model/dto';
 import {
   DateString,
   FetchService,
   MonthString,
   MutationMethod,
 } from 'common/utils';
+import { TimeScale } from 'common/types';
 
 const createExercise = async (
   exerciseData: ExerciseFields,
@@ -69,6 +76,20 @@ const getUserCalendarStats = async (
   return stats;
 };
 
+const getUserExerciseStats = async (
+  timeScale: TimeScale,
+  startDate: Date,
+  token: string,
+): Promise<ExerciseStatsDto[]> => {
+  const stats = await FetchService.runQuery<ExerciseStatsDto[]>(
+    `/stats?timeScale=${timeScale}&startDate=${dayjs(startDate).format(
+      'YYYY-MM-DD',
+    )}`,
+    token,
+  );
+  return stats;
+};
+
 export const ExerciseService = {
   createExercise,
   updateExercise,
@@ -76,4 +97,5 @@ export const ExerciseService = {
   getExercise,
   getUserDayExercises,
   getUserCalendarStats,
+  getUserExerciseStats,
 };

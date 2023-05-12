@@ -5,6 +5,7 @@ import _ from 'lodash';
 import {
   CalendarStatsDto,
   ExerciseDto,
+  ExerciseStatsDto,
   ExerciseTypeDto,
 } from 'common/model/dto';
 import { isAuthenticated } from '../middleware';
@@ -22,7 +23,7 @@ import {
 } from 'common/mocks/repo';
 import { ExerciseEntity, ExerciseTypeEntity } from 'common/mocks/entities';
 import { DayStatus } from 'features/calendar/types';
-import { ExerciseStatus } from 'common/types';
+import { ExerciseStatus, TimeScale } from 'common/types';
 
 const createExerciseHandler: RestHandler = rest.post<
   ExerciseFields,
@@ -309,10 +310,199 @@ const getUserDayExercisesHandler: RestHandler = rest.get<
   }
 });
 
+const getUserExerciseStatsHandler: RestHandler = rest.get<
+  null,
+  PathParams<string>,
+  ExerciseStatsDto[] | string
+>(`${apiBaseUrl}/stats`, async (req, res, ctx) => {
+  try {
+    if (!isAuthenticated(req)) {
+      return res(ctx.status(401), ctx.text('User is not authenticated'));
+    }
+
+    const user = await UserRepository.getUserByToken(extractToken(req));
+    if (!user) {
+      return res(ctx.status(403), ctx.text('Invalid authentication token'));
+    }
+
+    const timeScale = req.url.searchParams.get('timeScale');
+    if (!timeScale) {
+      return res(ctx.status(400), ctx.text('Time scale not specified'));
+    }
+
+    const startDate = req.url.searchParams.get('startDate');
+    if (!startDate || !dayjs(startDate).isValid()) {
+      return res(
+        ctx.status(400),
+        ctx.text('Start date not specified or invalid'),
+      );
+    }
+
+    const endDate = dayjs(startDate)
+      .endOf(timeScale as TimeScale)
+      .toDate();
+
+    const allUserExercises: ExerciseEntity[] =
+      await ExerciseRepository.getAllUserExercises(user.id);
+
+    const groupedByType = _(allUserExercises)
+      .filter((exercise) => {
+        const date = dayjs(exercise.date).toDate();
+        return date >= dayjs(startDate).toDate() && date <= endDate;
+      })
+      .groupBy('exerciseTypeId')
+      .mapValues((exercises) =>
+        exercises.map((exercise) => ({
+          status: exercise.status,
+          date: dayjs(exercise.date).toDate(),
+          effort: exercise.effort * (exercise.setsCount || 1),
+        })),
+      )
+      .value();
+
+    // console.log(groupedByType);
+
+    const aggregateEffort = _(groupedByType)
+      .mapValues((exercises) =>
+        exercises.reduce((total, curr) => total + curr.effort, 0),
+      )
+      .value();
+
+    // console.log('total effort', aggregateEffort);
+
+    const groupedByTypePrev = _(allUserExercises)
+      .filter((exercise) => {
+        const date = dayjs(exercise.date).toDate();
+        const prevStartDate = dayjs(startDate)
+          .add(-1, timeScale as TimeScale)
+          .toDate();
+        return date >= prevStartDate && date < dayjs(startDate).toDate();
+      })
+      .groupBy('exerciseTypeId')
+      .mapValues((exercises) =>
+        exercises.map((exercise) => ({
+          effort: exercise.effort * (exercise.setsCount || 1),
+        })),
+      )
+      .mapValues((exercises) =>
+        exercises.reduce((total, curr) => total + curr.effort, 0),
+      )
+      .value();
+
+    // console.log('by type (prev)', groupedByTypePrev);
+
+    const aggregateChange = _(aggregateEffort)
+      .mapValues((currEffort, exerciseTypeId) => {
+        const prevEffort = groupedByTypePrev[exerciseTypeId];
+        return prevEffort
+          ? Math.round(((currEffort - prevEffort) / prevEffort) * 100) / 100
+          : undefined;
+      })
+      .value();
+
+    // console.log('change', aggregateChange);
+
+    const subperiodKey = (() => {
+      switch (timeScale) {
+        case TimeScale.Year:
+          return 'month';
+        case TimeScale.Month:
+        default:
+          return 'day';
+        case TimeScale.Week:
+          return 'dayOfWeek';
+      }
+    })();
+
+    const aggregateBySubperiod = _(groupedByType)
+      .mapValues((exercises) =>
+        _(exercises)
+          .map((exercise) => {
+            const subperiodValue = (() => {
+              switch (subperiodKey) {
+                case 'dayOfWeek':
+                  return exercise.date.toLocaleString('default', {
+                    weekday: 'short',
+                  });
+                case 'day':
+                default:
+                  return dayjs(exercise.date).day();
+                case 'month':
+                  return dayjs(exercise.date).month();
+              }
+            })();
+            return {
+              [subperiodKey]: subperiodValue,
+              effort: exercise.effort,
+            };
+          })
+          .groupBy(subperiodKey)
+          .mapValues((exercises) =>
+            exercises.reduce((total, curr) => total + curr.effort, 0),
+          )
+          .value(),
+      )
+      .mapValues((exercises) =>
+        Object.entries(exercises).map(([subperiodValue, effort]) => ({
+          [subperiodKey]: subperiodValue,
+          effort,
+        })),
+      )
+      .value();
+
+    // console.log('by subperiod', aggregateBySubperiod);
+
+    const aggregateByStatus = _(groupedByType)
+      .mapValues((exercises) =>
+        _(exercises)
+          .map((exercise) => ({
+            status: exercise.status,
+            effort: exercise.effort,
+          }))
+          .groupBy('status')
+          .mapValues((exercises) =>
+            exercises.reduce((total, curr) => total + curr.effort, 0),
+          )
+          .value(),
+      )
+      .mapValues((exercises) =>
+        Object.entries(exercises).map(([status, effort]) => ({
+          status: status as ExerciseStatus,
+          effort,
+        })),
+      )
+      .value();
+
+    // console.log('by status', aggregateByStatus);
+
+    const exerciseTypes: ExerciseTypeEntity[] =
+      await ExerciseTypeRepository.getAllTypes();
+
+    const exerciseStats: ExerciseStatsDto[] = exerciseTypes.map(
+      (exerciseType) => ({
+        exerciseType,
+        timeScale: timeScale as TimeScale,
+        startDate,
+        totalEffort: aggregateEffort[exerciseType.id],
+        effortChange: aggregateChange[exerciseType.id],
+        breakdownByStatus: aggregateByStatus[exerciseType.id],
+        breakdownBySubperiod: aggregateBySubperiod[exerciseType.id],
+      }),
+    ) as ExerciseStatsDto[];
+
+    // console.log(exerciseStats);
+
+    return res(ctx.status(200), ctx.json(exerciseStats));
+  } catch (error) {
+    return res(ctx.status(500), ctx.text('Unknown server error'));
+  }
+});
+
 export const excerciseHandlers = [
   getExerciseHandler,
   getUserCalendarStatsHandler,
   getUserDayExercisesHandler,
+  getUserExerciseStatsHandler,
   createExerciseHandler,
   updateExerciseHandler,
   deleteExerciseHandler,
