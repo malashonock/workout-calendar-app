@@ -15,10 +15,11 @@ import { CalendarPage, calendarLoader } from 'features/calendar/pages';
 import { TrackerPage, exerciseLoader } from 'features/tracker/pages';
 import { StatsPage } from 'features/stats/pages';
 import { LoginPage, SignupPage } from 'features/auth/pages';
-import { Logout } from 'features/auth/components';
+import { Logout, ProtectedRoute } from 'features/auth/components';
 import { selectAuthToken } from 'common/store';
 import { WeatherForecastProvider } from 'features/tracker/components';
 import { ExerciseTypesProvider } from 'common/components';
+import { RedirectCondition } from 'features/auth/types';
 
 const routes = (authToken?: string): JSX.Element => (
   <Route path="/" element={<Layout />}>
@@ -49,21 +50,53 @@ const routes = (authToken?: string): JSX.Element => (
           />
           <Route
             path=":date"
-            element={<TrackerPage />}
+            element={
+              <ProtectedRoute redirectIf={RedirectCondition.Unauthenticated}>
+                <TrackerPage />
+              </ProtectedRoute>
+            }
             loader={exerciseLoader(authToken)}
           />
         </Route>
       </Route>
-      <Route path="stats" element={<StatsPage />} />
+      <Route
+        path="stats"
+        element={
+          <ProtectedRoute redirectIf={RedirectCondition.Unauthenticated}>
+            <StatsPage />
+          </ProtectedRoute>
+        }
+      />
     </Route>
     <Route path="auth">
-      <Route path="signup" element={<SignupPage />} />
+      <Route
+        path="signup"
+        element={
+          <ProtectedRoute redirectIf={RedirectCondition.Authenticated}>
+            <SignupPage />
+          </ProtectedRoute>
+        }
+      />
       {/* <Route
         path="userprofile"
         element={<Typography>User profile page</Typography>}
       /> */}
-      <Route path="login" element={<LoginPage />} />
-      <Route path="logout" element={<Logout />} />
+      <Route
+        path="login"
+        element={
+          <ProtectedRoute redirectIf={RedirectCondition.Authenticated}>
+            <LoginPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="logout"
+        element={
+          <ProtectedRoute redirectIf={RedirectCondition.Unauthenticated}>
+            <Logout />
+          </ProtectedRoute>
+        }
+      />
     </Route>
     <Route path="404" element={<Typography>Page not found</Typography>} />
     <Route path="*" element={<Navigate to="/404" replace />} />
