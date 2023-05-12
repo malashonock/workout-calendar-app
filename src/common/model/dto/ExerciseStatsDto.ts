@@ -6,13 +6,13 @@ export interface ExerciseStatsDto {
   exerciseType: ExerciseTypeDto;
   timeScale: TimeScale;
   startDate: DateString;
-  totalEffort: number;
-  effortChange: number; // Percentage
-  breakdownByStatus: Array<{
+  totalEffort?: number;
+  effortChange?: number; // Percentage vs totalEffort for previous period
+  breakdownByStatus?: Array<{
     status: ExerciseStatus;
     effort: number;
   }>;
-  breakdownBySubperiod:
+  breakdownBySubperiod?:
     | Array<{
         dayOfWeek: string;
         effort: number;
