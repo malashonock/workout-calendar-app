@@ -14,7 +14,7 @@ export const NavbarBottom: FunctionComponent = () => {
   const show = activeTabIndex > -1;
 
   return show && isMobileScreen ? (
-    <AppBar position="sticky" className={styles.wrapper}>
+    <AppBar position="sticky" className={styles.wrapper} component="footer">
       <Container maxWidth="lg">
         <Toolbar className={styles.content}>
           <NavTabs variant={NavTabsVariant.Bottom} />
