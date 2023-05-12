@@ -58,13 +58,12 @@ export const StatsPage: FunctionComponent = () => {
       {exerciseStats.length > 0 ? (
         <Box className={styles.cards}>
           {exerciseStats.map(
-            (exerciseStat: ExerciseStatsDto): JSX.Element | null =>
-              exerciseStat.totalEffort ? (
-                <ExerciseStatsCard
-                  key={exerciseStat.exerciseType.id}
-                  stats={exerciseStat}
-                />
-              ) : null,
+            (exerciseStat: ExerciseStatsDto): JSX.Element => (
+              <ExerciseStatsCard
+                key={exerciseStat.exerciseType.id}
+                stats={exerciseStat}
+              />
+            ),
           )}
         </Box>
       ) : (
