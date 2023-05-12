@@ -3,9 +3,9 @@ import { AppBar, Container, Toolbar } from '@mui/material';
 
 import { NavTabs, NavTabsVariant } from '..';
 import { useScreenWidth } from '../../hooks';
+import { useActiveTab } from '../../hooks';
 
 import styles from './NavbarBottom.module.scss';
-import { useActiveTab } from '../../hooks';
 
 export const NavbarBottom: FunctionComponent = () => {
   const { isMobileScreen } = useScreenWidth();

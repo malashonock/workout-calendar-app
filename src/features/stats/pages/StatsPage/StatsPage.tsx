@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Box, Grid, Paper, Typography } from '@mui/material';
+import { Box, Paper, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import weekDay from 'dayjs/plugin/weekday';
 
